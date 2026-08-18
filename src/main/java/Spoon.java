@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Spoon {
     public static void main(String[] args) {
@@ -25,5 +26,6 @@ public class Spoon {
         }
 
         System.out.println(end);
+        scanner.close();
     }
 }
