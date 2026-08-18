@@ -12,20 +12,39 @@ public class Spoon {
 
         // Scanner
         Scanner scanner = new Scanner(System.in);
+        // List for storage
+        ArrayList<String> list = new ArrayList<>();
 
+        // Start message
         System.out.println(banner);
         System.out.println(divider);
         System.out.println(introduction);
         System.out.println(divider);
 
-        String input = scanner.nextLine();
-        while (!input.equalsIgnoreCase("bye")) {
-            System.out.println(input);
-            System.out.println(divider);
-            input = scanner.nextLine();
+        // Chat logic
+        chatLoop: while (true) {
+            String input = scanner.nextLine();
+
+            switch (input.toLowerCase()) {
+                // Exit command
+                case "bye":
+                    System.out.println(end);
+                    break chatLoop;
+                // List command
+                case "list":
+                    for (int i = 0; i < list.size(); i++) {
+                        System.out.println(Integer.toString(i + 1) + ". " + list.get(i));
+                    }
+                    System.out.println(divider);
+                    break;
+                default:
+                    list.add(input);
+                    System.out.println("Added " + input + " to list! :)");
+                    System.out.println(divider);
+            }
         }
 
-        System.out.println(end);
+        // Clean up
         scanner.close();
     }
 }
