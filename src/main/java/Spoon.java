@@ -8,11 +8,19 @@ public class Spoon {
     private static final String BANNER = "~~~ Welcome to Spoon ~~~";
     private static final String INTRODUCTION = "Hello, I'm Spoon, your friendly neighbourhood chatbot!\n" +
             "What do you wanna talk about?";
+    private static final String TASK_ADDED = "I've added this task to the list! :)";
+    private static final String LIST_LENGTH = "Now, you have %d tasks!\n" +
+            "You're doing great, keep up the good work!";
     private static final String LIST_INTRODUCTION = "Here's your list!";
     private static final String MARK_COMPLETE = "YAYYYY, task complete!";
     private static final String MARK_INCOMPLETE = "Oops, there's more work to be done!";
+    private static final String NO_SUCH_COMMAND = "Uh oh, I don't know what that means";
     private static final String EXIT = "Goodbye! Let's speak again soon!";
 
+    // Symbols
+    private static final String TODO_SYMBOL = "[T]";
+    private static final String DEADLINE_SYMBOL = "[D]";
+    private static final String EVENT_SYMBOL = "[E]";
     private static final String COMPLETED_SYMBOL = "[X] ";
     private static final String UNCOMPLETED_SYMBOL = "[ ] ";
 
@@ -25,18 +33,6 @@ public class Spoon {
     public Spoon() {
         this.scanner = new Scanner(System.in);
         this.list = new ArrayList<>();
-    }
-
-    // Helper method to construct output
-    public String getOutput(int index) {
-        Task task = list.get(index - 1);
-        // Generates index of the task (starting from 1)
-        String output = Integer.toString(index) + ". ";
-        // Ternary operator to decide if task is marked completed or not
-        output += task.getCompleted() ? COMPLETED_SYMBOL : UNCOMPLETED_SYMBOL;
-        // Loads the task name
-        output += task.getName();
-        return output;
     }
 
     // TODO: determine if task is already completed or not when marking complete/incomplete
@@ -54,6 +50,7 @@ public class Spoon {
             String input = scanner.nextLine();
             String[] inputArray = input.split("\\s+", 2);
             String command = inputArray[0].toLowerCase();
+            // Index only for mark and unmark commands
             String index = inputArray.length > 1 ? inputArray[1] : null;
 
             switch (command) {
@@ -66,33 +63,44 @@ public class Spoon {
                 case "list": {
                     System.out.println(LIST_INTRODUCTION);
                     for (int i = 1; i < list.size() + 1; i++) {
-                        String newLine = getOutput(i);
-                        System.out.println(newLine);
+                        Task task = list.get(i - 1);
+                        System.out.println(Integer.toString(i) + ". " + task.toString());
                     }
                     break;
                 }
                 // Mark command
                 case "mark": {
-                    int i = Integer.parseInt(index);
-                    list.get(i - 1).complete();
+                    Task task = list.get(Integer.parseInt(index) - 1);
+                    task.complete();
                     System.out.println(MARK_COMPLETE);
-                    String newLine = getOutput(i);
-                    System.out.println(newLine);
+                    System.out.println(task.toString());
                     break;
                 }
                 // Unmark command
                 case "unmark": {
-                    int i = Integer.parseInt(index);
-                    list.get((Integer.parseInt(index) - 1)).uncomplete();
+                    Task task = list.get(Integer.parseInt(index) - 1);
+                    task.uncomplete();
                     System.out.println(MARK_INCOMPLETE);
-                    String newLine = getOutput(i);
-                    System.out.println(newLine);
+                    System.out.println(task.toString());
                     break;
                 }
-                // Default: adding tasks
+                // Add todos, deadlines or events
+                case "todo", "deadline", "event": {
+                    Task task = switch (command) {
+                        case "todo" -> new ToDo(input);
+                        // TODO: Edit these
+                        case "deadline" -> new Deadline(input, input);
+                        case "event" -> new Event(input, input, input);
+                        default -> null; // Cannot happen
+                    };
+                    list.add(task);
+                    System.out.println(TASK_ADDED);
+                    System.out.println(task.toString());
+                    System.out.println(String.format(LIST_LENGTH, list.size()));
+                }
+                // Default: command not recognized
                 default: {
-                    list.add(new Task(input));
-                    System.out.println("Added " + input + " to list! :)");
+                    System.out.println(NO_SUCH_COMMAND);
                 }
             }
             System.out.println(DIVIDER);
