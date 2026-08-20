@@ -13,6 +13,7 @@ public class Spoon {
     private static final String LIST_INTRODUCTION = "Here's your list!";
     private static final String MARK_COMPLETE = "YAYYYY, task complete!";
     private static final String MARK_INCOMPLETE = "Oops, there's more work to be done!";
+    private static final String DELETE_TASK = "Okay, task deleted!";
     private static final String EXIT = "Goodbye! Let's speak again soon!";
 
     // Scanner
@@ -42,24 +43,44 @@ public class Spoon {
                 }
                 break;
             }
-            // For mark and unmark commands, inputArray[1] would be the index of the task
-            // Mark and unmark command
-            case "mark", "unmark": {
-                // Error handling
-                Task task = checkMarkUnmark(command, inputArray);
 
-                // Mark command
-                if (command.equals("mark")) {
-                    task.complete();
-                    System.out.println(MARK_COMPLETE);
-                // Unmark command
-                } else {
-                    task.uncomplete();
-                    System.out.println(MARK_INCOMPLETE);
+            // For mark, unmark and delete commands, inputArray[1] would be the index of the task
+            // Mark, unmark and delete command
+            case "mark", "unmark", "delete": {
+                // Error handling
+                int index = checkEdit(command, inputArray);
+                Task task = list.get(index);
+
+                switch (command) {
+                    // Mark command
+                    case "mark": {
+                        task.complete();
+                        System.out.println(MARK_COMPLETE);
+                        break;
+                    }
+                    // Unmark command
+                    case "unmark": {
+                        task.uncomplete();
+                        System.out.println(MARK_INCOMPLETE);
+                        break;
+                    }
+                    // Delete command
+                    case "delete": {
+                        list.remove(index);
+                        System.out.println(DELETE_TASK);
+                        break;
+                    }
+                    // Default: placeholder value, should never happen
+                    default: {
+                        throw new FatalErrorException();
+                    }
                 }
+
                 System.out.println(task);
+                if (command.equals("delete")) System.out.printf((LIST_LENGTH) + "%n", list.size());
                 break;
             }
+
             // Add todos, deadlines or events command
             case "todo", "deadline", "event": {
                 // Error handling
@@ -79,8 +100,8 @@ public class Spoon {
         }
     }
 
-    // Helper method for exception checking in mark and unmark commands
-    private Task checkMarkUnmark(String command, String[] inputArray) throws SpoonException{
+    // Helper method for exception checking in mark, unmark and delete commands
+    private int checkEdit(String command, String[] inputArray) throws SpoonException{
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
             throw new MissingArgumentException(command, "index");
         }
@@ -95,10 +116,10 @@ public class Spoon {
         if (index < 1 || index > list.size()) {
             throw new IndexOutOfRangeException(1, list.size());
         }
-        return list.get(index - 1);
+        return index - 1;
     }
 
-    // Helper method for exception checking in adding todos
+    // Helper method for exception checking in adding todos, deadlines and events
     private Task checkAdd(String command, String[] inputArray) throws SpoonException{
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
             throw new MissingArgumentException(command, "description");
@@ -125,7 +146,7 @@ public class Spoon {
                     throw new MissingArgumentException(command, "description");
                 }
                 String[] eventArray = inputArray[1].split("\\s+/from\\s+", 2);
-                if (eventArray.length < 2 || eventArray[1].isBlank() || eventArray[1].startsWith("/to")) {
+                if (eventArray.length < 2 || eventArray[1].isBlank() || eventArray[1].startsWith("(?i)/to")) {
                     throw new MissingArgumentException(command, "start date (starting with /from)");
                 }
                 String[] eventArgsArray = eventArray[1].split("\\s+/to\\s+", 2);
