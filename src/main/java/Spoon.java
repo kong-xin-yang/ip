@@ -9,20 +9,12 @@ public class Spoon {
     private static final String INTRODUCTION = "Hello, I'm Spoon, your friendly neighbourhood chatbot!\n" +
             "What do you wanna talk about?";
     private static final String TASK_ADDED = "I've added this task to the list! :)";
-    private static final String LIST_LENGTH = "Now, you have %d tasks!\n" +
-            "You're doing great, keep up the good work!";
+    private static final String LIST_LENGTH = "Now, you have %d task(s)! \uD83D\uDC4D";
     private static final String LIST_INTRODUCTION = "Here's your list!";
     private static final String MARK_COMPLETE = "YAYYYY, task complete!";
     private static final String MARK_INCOMPLETE = "Oops, there's more work to be done!";
     private static final String NO_SUCH_COMMAND = "Uh oh, I don't know what that means";
     private static final String EXIT = "Goodbye! Let's speak again soon!";
-
-    // Symbols
-    private static final String TODO_SYMBOL = "[T]";
-    private static final String DEADLINE_SYMBOL = "[D]";
-    private static final String EVENT_SYMBOL = "[E]";
-    private static final String COMPLETED_SYMBOL = "[X] ";
-    private static final String UNCOMPLETED_SYMBOL = "[ ] ";
 
     // Scanner
     private final Scanner scanner;
@@ -46,12 +38,10 @@ public class Spoon {
 
         // Chat logic
         chatLoop: while (true) {
-            // Get input and split it into commands and indexes
+            // Get input and split it into commands, index and options
             String input = scanner.nextLine();
             String[] inputArray = input.split("\\s+", 2);
             String command = inputArray[0].toLowerCase();
-            // Index only for mark and unmark commands
-            String index = inputArray.length > 1 ? inputArray[1] : null;
 
             switch (command) {
                 // Exit command
@@ -64,39 +54,56 @@ public class Spoon {
                     System.out.println(LIST_INTRODUCTION);
                     for (int i = 1; i < list.size() + 1; i++) {
                         Task task = list.get(i - 1);
-                        System.out.println(Integer.toString(i) + ". " + task.toString());
+                        System.out.println(i + ". " + task.toString());
                     }
                     break;
                 }
+                // For mark and unmark commands, inputArray[1] would be the index of the task
                 // Mark command
                 case "mark": {
-                    Task task = list.get(Integer.parseInt(index) - 1);
+                    Task task = list.get(Integer.parseInt(inputArray[1]) - 1);
                     task.complete();
                     System.out.println(MARK_COMPLETE);
-                    System.out.println(task.toString());
+                    System.out.println(task);
                     break;
                 }
                 // Unmark command
                 case "unmark": {
-                    Task task = list.get(Integer.parseInt(index) - 1);
+                    Task task = list.get(Integer.parseInt(inputArray[1]) - 1);
                     task.uncomplete();
                     System.out.println(MARK_INCOMPLETE);
-                    System.out.println(task.toString());
+                    System.out.println(task);
                     break;
                 }
                 // Add todos, deadlines or events
                 case "todo", "deadline", "event": {
-                    Task task = switch (command) {
-                        case "todo" -> new ToDo(input);
-                        // TODO: Edit these
-                        case "deadline" -> new Deadline(input, input);
-                        case "event" -> new Event(input, input, input);
-                        default -> null; // Cannot happen
-                    };
+                    Task task;
+                    switch (command) {
+                        case "todo": {
+                            task = new ToDo(inputArray[1]);
+                            break;
+                        }
+                        case "deadline": {
+                            String[] deadlineArray = inputArray[1].split("\\s+/by\\s+", 2);
+                            task = new Deadline(deadlineArray[0], deadlineArray[1]);
+                            break;
+                        }
+                        case "event": {
+                            String[] eventArray = inputArray[1].split("\\s+/from\\s+", 2);
+                            String[] eventArgsArray = eventArray[1].split("\\s+/to\\s+", 2);
+                            task = new Event(eventArray[0], eventArgsArray[0], eventArgsArray[1]);
+                            break;
+                        }
+                        // Default: placeholder value, should never happen
+                        default: {
+                            task = null;
+                        }
+                    }
                     list.add(task);
                     System.out.println(TASK_ADDED);
-                    System.out.println(task.toString());
-                    System.out.println(String.format(LIST_LENGTH, list.size()));
+                    System.out.println(task);
+                    System.out.printf((LIST_LENGTH) + "%n", list.size());
+                    break;
                 }
                 // Default: command not recognized
                 default: {
