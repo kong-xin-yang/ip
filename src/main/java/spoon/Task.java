@@ -26,6 +26,16 @@ public abstract class Task {
         this.isCompleted = false;
     }
 
+    /**
+     * Formats the task into string for writing to the file.
+     *
+     * @return file-formatted representation of task.
+     */
+    public String format() {
+        String status = this.isCompleted ? "1" : "0";
+        return status + " | " + name;
+    }
+
     @Override
     public String toString() {
         String status = this.isCompleted ? COMPLETED_SYMBOL : UNCOMPLETED_SYMBOL;

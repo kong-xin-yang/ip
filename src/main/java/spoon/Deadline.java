@@ -14,6 +14,12 @@ public class Deadline extends Task {
 
     // Methods
     @Override
+    public String format() {
+        return "D | " + super.format() +
+                " | " + deadline;
+    }
+
+    @Override
     public String toString() {
         return "[D]" + super.toString() +
                 " (by: " + deadline + ")";

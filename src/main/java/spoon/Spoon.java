@@ -12,11 +12,13 @@ import java.util.ArrayList;
  * @author kongxinyang.
  */
 public class Spoon {
+    private static final String FILE_PATH = "./data/spoon.txt";
 
     // String definitions
     private static final String DIVIDER = "-".repeat(80);
     private static final String BANNER = "~~~ Welcome to Spoon ~~~";
-    private static final String INTRODUCTION = "Hello, I'm Spoon, your friendly neighbourhood chatbot!\n" +
+    private static final String INTRODUCTION = "Hello, I'm Spoon, your friendly neighbourhood chatbot!"
+            + System.lineSeparator() +
             "What do you wanna talk about?";
     private static final String TASK_ADDED = "I've added this task to the list! :)";
     private static final String LIST_LENGTH = "Now, you have %d task(s)! \uD83D\uDC4D";
@@ -28,13 +30,16 @@ public class Spoon {
 
     // Scanner
     private final Scanner scanner;
-    // List for storage
+    // Storage
+    private final Storage storage;
+    // List of tasks
     private final ArrayList<Task> list;
 
     // Constructor
     public Spoon() {
         this.scanner = new Scanner(System.in);
-        this.list = new ArrayList<>();
+        this.storage = new Storage(FILE_PATH);
+        this.list = storage.load();
     }
 
     // Methods
@@ -132,16 +137,19 @@ public class Spoon {
             throw new MissingArgumentException(command.toString().toLowerCase(), "index");
         }
         int index;
+
         // Check that argument is a number
         try {
             index = Integer.parseInt(inputArray[1]);
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("number");
         }
+
         // Check that argument is within bounds
         if (index < 1 || index > list.size()) {
             throw new IndexOutOfRangeException(1, list.size());
         }
+
         return index - 1;
     }
 
@@ -164,6 +172,7 @@ public class Spoon {
             case TODO: {
                 return new ToDo(inputArray[1]);
             }
+
             // Add deadlines command
             case DEADLINE: {
                 if (inputArray[1].startsWith("/by")) {
@@ -175,6 +184,7 @@ public class Spoon {
                 }
                 return new Deadline(deadlineArray[0], deadlineArray[1]);
             }
+
             // Add events command
             case EVENT: {
                 if (inputArray[1].startsWith("/from") || inputArray[1].startsWith("/to")) {
@@ -190,6 +200,7 @@ public class Spoon {
                 }
                 return new Event(eventArray[0], eventArgsArray[0], eventArgsArray[1]);
             }
+
             // Default: placeholder value, should never happen
             default: {
                 throw new FatalErrorException();
@@ -214,7 +225,6 @@ public class Spoon {
             String input = scanner.nextLine();
             // Exit command
             if (Command.fromString(input) == Command.BYE) {
-                System.out.println(EXIT);
                 break;
             } else {
                 try {
@@ -228,8 +238,10 @@ public class Spoon {
             System.out.println(DIVIDER);
         }
 
-        // Clean up
+        // Save + clean up
+        storage.save(list);
         scanner.close();
+        System.out.println(EXIT);
     }
 
     // Entry point

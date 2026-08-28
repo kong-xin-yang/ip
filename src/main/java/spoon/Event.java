@@ -16,6 +16,13 @@ public class Event extends Task{
 
     // Methods
     @Override
+    public String format() {
+        return "E | " + super.format() +
+                " | " + startDate +
+                " | " + endDate;
+    }
+
+    @Override
     public String toString() {
         return "[E]" + super.toString() +
                 " (from: " + startDate +
