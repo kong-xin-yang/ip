@@ -1,6 +1,16 @@
+package spoon;
+
+import spoon.exception.*;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
+/**
+ * The root of the Spoon chatbot.
+ * Main entry point + implementation logic.
+ *
+ * @author kongxinyang.
+ */
 public class Spoon {
 
     // String definitions
@@ -28,14 +38,20 @@ public class Spoon {
     }
 
     // Methods
-    // Helper method to parse input and output text (and throw exceptions)
+    /**
+     * Parses input and converts them to commands + arguments.
+     *
+     * @param input user input.
+     * @throws SpoonException if an error is detected (refer to the below methods).
+     * @throws InvalidCommandException if a command is invalid.
+     */
     private void parseInput(String input) throws SpoonException{
         String[] inputArray = input.split("\\s+", 2);
         Command command = Command.fromString(inputArray[0]);
 
         switch (command) {
             // List command
-            case Command.LIST: {
+            case LIST: {
                 System.out.println(LIST_INTRODUCTION);
                 for (int i = 1; i < list.size() + 1; i++) {
                     Task task = list.get(i - 1);
@@ -46,26 +62,26 @@ public class Spoon {
 
             // For mark, unmark and delete commands, inputArray[1] would be the index of the task
             // Mark, unmark and delete command
-            case Command.MARK, Command.UNMARK, Command.DELETE: {
+            case MARK, UNMARK, DELETE: {
                 // Error handling
                 int index = checkEdit(command, inputArray);
                 Task task = list.get(index);
 
                 switch (command) {
                     // Mark command
-                    case Command.MARK: {
+                    case MARK: {
                         task.complete();
                         System.out.println(MARK_COMPLETE);
                         break;
                     }
                     // Unmark command
-                    case Command.UNMARK: {
+                    case UNMARK: {
                         task.uncomplete();
                         System.out.println(MARK_INCOMPLETE);
                         break;
                     }
                     // Delete command
-                    case Command.DELETE: {
+                    case DELETE: {
                         list.remove(index);
                         System.out.println(DELETE_TASK);
                         break;
@@ -82,7 +98,7 @@ public class Spoon {
             }
 
             // Add todos, deadlines or events command
-            case Command.TODO, Command.DEADLINE, Command.EVENT: {
+            case TODO, DEADLINE, EVENT: {
                 // Error handling
                 Task task = checkAdd(command, inputArray);
 
@@ -94,14 +110,23 @@ public class Spoon {
                 break;
             }
             // Command.UNKNOWN and default: command not recognized
-            case Command.UNKNOWN:
+            case UNKNOWN:
+                // Fall through
             default: {
                 throw new InvalidCommandException();
             }
         }
     }
 
-    // Helper method for exception checking in mark, unmark and delete commands
+    /**
+     * Checks for exceptions in mark, unmark and delete commands.
+     *
+     * @param command command parsed from user input.
+     * @param inputArray arguments + inputs parsed from user input.
+     * @return index of task with respect to list.
+     * @throws InvalidFormatException if argument is not a number.
+     * @throws IndexOutOfRangeException if argument is not within bounds.
+     */
     private int checkEdit(Command command, String[] inputArray) throws SpoonException{
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
             throw new MissingArgumentException(command.toString().toLowerCase(), "index");
@@ -120,7 +145,15 @@ public class Spoon {
         return index - 1;
     }
 
-    // Helper method for exception checking in adding todos, deadlines and events
+    /**
+     * Checks for exceptions in adding todos, deadlines and events.
+     *
+     * @param command command parsed from user input.
+     * @param inputArray arguments + inputs parsed from user input.
+     * @return task initialized with command.
+     * @throws MissingArgumentException if argument(s) for task initialization is missing.
+     * @throws FatalErrorException as a placeholder (should never happen).
+     */
     private Task checkAdd(Command command, String[] inputArray) throws SpoonException{
         String commandString = command.toString().toLowerCase();
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
@@ -128,11 +161,11 @@ public class Spoon {
         }
         switch (command) {
             // Add todos command
-            case Command.TODO: {
+            case TODO: {
                 return new ToDo(inputArray[1]);
             }
             // Add deadlines command
-            case Command.DEADLINE: {
+            case DEADLINE: {
                 if (inputArray[1].startsWith("/by")) {
                     throw new MissingArgumentException(commandString, "description");
                 }
@@ -143,7 +176,7 @@ public class Spoon {
                 return new Deadline(deadlineArray[0], deadlineArray[1]);
             }
             // Add events command
-            case Command.EVENT: {
+            case EVENT: {
                 if (inputArray[1].startsWith("/from") || inputArray[1].startsWith("/to")) {
                     throw new MissingArgumentException(commandString, "description");
                 }
@@ -164,6 +197,9 @@ public class Spoon {
         }
     }
 
+    /**
+     * Starts the Spoon chatbot.
+     */
     public void run() {
 
         // Start message

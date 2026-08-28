@@ -1,3 +1,8 @@
+package spoon.exception;
+
+/**
+ * Thrown when the command given by the user is invalid.
+ */
 public class InvalidCommandException extends SpoonException {
 
     // Constructor

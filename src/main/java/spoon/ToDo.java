@@ -1,3 +1,8 @@
+package spoon;
+
+/**
+ * Represents a To-Do (subclass of Task).
+ */
 public class ToDo extends Task{
 
     // Constructor

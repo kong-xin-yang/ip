@@ -1,3 +1,8 @@
+package spoon.exception;
+
+/**
+ * Thrown when the argument given by the user is not in the proper format (e.g. integer, string etc.).
+ */
 public class InvalidFormatException extends SpoonException {
 
     // Constructor

@@ -1,4 +1,9 @@
-public class IndexOutOfRangeException extends SpoonException{
+package spoon.exception;
+
+/**
+ * Thrown when the index given by the user is out of range.
+ */
+public class IndexOutOfRangeException extends SpoonException {
 
     // Constructor
     public IndexOutOfRangeException(int lowerBound, int upperBound) {

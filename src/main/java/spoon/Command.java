@@ -1,3 +1,8 @@
+package spoon;
+
+/**
+ * Represents the set of valid comments recognized by Spoon.
+ */
 public enum Command {
     BYE,
     LIST,

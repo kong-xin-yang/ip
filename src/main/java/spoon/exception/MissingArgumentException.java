@@ -1,3 +1,8 @@
+package spoon.exception;
+
+/**
+ * Thrown when the input given by the user is missing argument(s).
+ */
 public class MissingArgumentException extends SpoonException {
 
     // Constructor

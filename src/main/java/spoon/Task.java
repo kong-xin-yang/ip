@@ -1,3 +1,8 @@
+package spoon;
+
+/**
+ * Represents a generic task with fields name and isCompleted.
+ */
 public abstract class Task {
 
     // Symbol Definitions
@@ -5,7 +10,7 @@ public abstract class Task {
     private static final String UNCOMPLETED_SYMBOL = "[ ] ";
 
     private String name;
-    private boolean completed = false;
+    private boolean isCompleted = false;
 
     // Constructor
     public Task(String name) {
@@ -14,16 +19,16 @@ public abstract class Task {
 
     // Methods
     public void complete() {
-        this.completed = true;
+        this.isCompleted = true;
     }
 
     public void uncomplete() {
-        this.completed = false;
+        this.isCompleted = false;
     }
 
     @Override
     public String toString() {
-        String status = this.completed ? COMPLETED_SYMBOL : UNCOMPLETED_SYMBOL;
+        String status = this.isCompleted ? COMPLETED_SYMBOL : UNCOMPLETED_SYMBOL;
         return status + " " + this.name;
     }
 }

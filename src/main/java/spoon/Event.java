@@ -1,3 +1,8 @@
+package spoon;
+
+/**
+ * Represents a Event (subclass of Task) with additional fields startDate and endDate.
+ */
 public class Event extends Task{
     private String startDate;
     private String endDate;

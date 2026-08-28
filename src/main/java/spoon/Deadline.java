@@ -1,3 +1,8 @@
+package spoon;
+
+/**
+ * Represents a Deadline (subclass of Task) with additional field deadline.
+ */
 public class Deadline extends Task {
     private String deadline;
 
