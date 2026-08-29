@@ -9,7 +9,7 @@ public abstract class Task {
     private static final String COMPLETED_SYMBOL = "[X] ";
     private static final String UNCOMPLETED_SYMBOL = "[ ] ";
 
-    private String name;
+    private final String name;
     private boolean isCompleted = false;
 
     // Constructor

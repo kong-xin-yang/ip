@@ -1,9 +1,9 @@
 package spoon;
 
-import spoon.exception.*;
-
 import java.util.Scanner;
 import java.util.ArrayList;
+
+import spoon.exception.*;
 
 /**
  * The root of the Spoon chatbot.
@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author kongxinyang.
  */
 public class Spoon {
+    // File path to external file containing data
     private static final String FILE_PATH = "./data/spoon.txt";
 
     // String definitions

@@ -1,27 +1,29 @@
 package spoon;
 
+import spoon.exception.InvalidFormatException;
+
 /**
  * Represents a Deadline (subclass of Task) with additional field deadline.
  */
 public class Deadline extends Task {
-    private String deadline;
+    private final DateFormat.ParseResult deadline;
 
     // Constructor
-    public Deadline(String name, String deadline) {
+    public Deadline(String name, String deadline) throws InvalidFormatException {
         super(name);
-        this.deadline = deadline;
+        this.deadline = DateFormat.parse(deadline);
     }
 
     // Methods
     @Override
     public String format() {
         return "D | " + super.format() +
-                " | " + deadline;
+                " | " + DateFormat.toStorage(deadline);
     }
 
     @Override
     public String toString() {
         return "[D]" + super.toString() +
-                " (by: " + deadline + ")";
+                " (by: " + DateFormat.toDisplay(deadline) + ")";
     }
 }
