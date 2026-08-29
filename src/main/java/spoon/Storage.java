@@ -22,7 +22,7 @@ public class Storage {
 
     // Methods
     /**
-     * Loads tasks from the file
+     * Loads tasks from file.
      *
      * @return list of tasks; returns an empty list if file doesn't exist.
      */
@@ -104,7 +104,7 @@ public class Storage {
     }
 
     /**
-     * Saves the current list of tasks to the file.
+     * Saves the current list of tasks to file.
      *
      * @param tasks current list of tasks.
      */
@@ -127,6 +127,5 @@ public class Storage {
             System.out.println("Error writing to storage file: " + e.getMessage());
         }
 
-        System.out.println("Tasks saved! Ready for next time!");
     }
 }
