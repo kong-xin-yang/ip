@@ -1,6 +1,12 @@
-package spoon;
+package spoon.parser;
 
+import spoon.task.Deadline;
+import spoon.task.Event;
+import spoon.command.Command;
 import spoon.exception.*;
+import spoon.task.Task;
+import spoon.task.TaskList;
+import spoon.task.ToDo;
 
 /**
  * Handles the input parsing of Spoon.

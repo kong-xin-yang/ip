@@ -1,6 +1,12 @@
 package spoon;
 
+import spoon.command.Command;
 import spoon.exception.*;
+import spoon.parser.Parser;
+import spoon.storage.Storage;
+import spoon.task.Task;
+import spoon.task.TaskList;
+import spoon.ui.UserInterface;
 
 /**
  * The root of the Spoon chatbot.

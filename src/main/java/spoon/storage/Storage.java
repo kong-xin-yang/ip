@@ -1,4 +1,4 @@
-package spoon;
+package spoon.storage;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import spoon.task.Deadline;
+import spoon.task.Event;
 import spoon.exception.SpoonException;
 import spoon.exception.FileCorruptedException;
+import spoon.task.Task;
+import spoon.task.ToDo;
 
 /**
  * Handles the loading and saving of the list of tasks to an external file.

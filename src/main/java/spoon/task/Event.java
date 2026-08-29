@@ -1,12 +1,13 @@
-package spoon;
+package spoon.task;
 
 import spoon.exception.InvalidFormatException;
 import spoon.exception.InvalidArgumentException;
+import spoon.util.DateFormat;
 
 /**
  * Represents an Event (subclass of Task) with additional fields startDate and endDate.
  */
-public class Event extends Task{
+public class Event extends Task {
     private final DateFormat.ParseResult startDate;
     private final DateFormat.ParseResult endDate;
 

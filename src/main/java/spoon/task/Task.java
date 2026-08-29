@@ -1,4 +1,4 @@
-package spoon;
+package spoon.task;
 
 /**
  * Represents a generic task with fields name and isCompleted.

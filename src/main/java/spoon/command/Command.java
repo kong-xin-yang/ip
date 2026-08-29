@@ -1,4 +1,4 @@
-package spoon;
+package spoon.command;
 
 /**
  * Represents the set of valid comments recognized by Spoon.

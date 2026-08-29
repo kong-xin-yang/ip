@@ -1,6 +1,9 @@
-package spoon;
+package spoon.ui;
 
 import java.util.Scanner;
+
+import spoon.task.Task;
+import spoon.task.TaskList;
 
 /**
  * Handles the user interface and display of Spoon.

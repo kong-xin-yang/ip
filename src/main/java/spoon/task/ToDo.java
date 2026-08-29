@@ -1,9 +1,9 @@
-package spoon;
+package spoon.task;
 
 /**
  * Represents a To-Do (subclass of Task).
  */
-public class ToDo extends Task{
+public class ToDo extends Task {
 
     // Constructor
     public ToDo(String name) {

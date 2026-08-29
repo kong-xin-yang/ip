@@ -1,6 +1,7 @@
-package spoon;
+package spoon.task;
 
 import spoon.exception.InvalidFormatException;
+import spoon.util.DateFormat;
 
 /**
  * Represents a Deadline (subclass of Task) with additional field deadline.
