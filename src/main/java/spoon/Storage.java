@@ -1,14 +1,17 @@
 package spoon;
 
-import spoon.exception.FileCorruptedException;
-import spoon.exception.SpoonException;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import spoon.exception.SpoonException;
+import spoon.exception.FileCorruptedException;
+
+/**
+ * Handles the loading and saving of the list of tasks to an external file.
+ */
 public class Storage {
     private final String filePath;
 
@@ -57,7 +60,7 @@ public class Storage {
                     boolean isCompleted = inputArray[1].equals("1");
                     String name = inputArray[2];
 
-                    Task task = null;
+                    Task task;
                     switch (taskType) {
                         case "T":
                             task = new ToDo(name);
