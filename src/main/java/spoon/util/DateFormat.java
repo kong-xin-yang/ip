@@ -61,6 +61,16 @@ public class DateFormat {
     }
 
     /**
+     * Converts a LocalDate to a string for display.
+     *
+     * @param date date (+ time) and a boolean representing if time is included.
+     * @return date (+ time) converted to string, in display format.
+     */
+    public static String toDisplay(LocalDate date) {
+        return date.format(DATE_DISPLAY);
+    }
+
+    /**
      * Converts a LocalDateTime to a string for storage.
      *
      * @param parsedDateTime date (+ time) and a boolean representing if time is included.
@@ -71,5 +81,39 @@ public class DateFormat {
             return parsedDateTime.dateTime().format(DATE_TIME_INPUT);
         }
         return parsedDateTime.dateTime().format(DATE_INPUT);
+    }
+
+    /**
+     * Evaluates if a deadline is due on a specific date.
+     *
+     * @param deadline date (+ time) of the deadline task.
+     * @param targetDate date being queried.
+     * @return true if deadline is due on the same day as target date, else false.
+     */
+    public static boolean isDueOn(LocalDateTime deadline, LocalDate targetDate) {
+        return deadline.toLocalDate().isEqual(targetDate);
+    }
+
+    /**
+     * Evaluates if an event is due on a specific date.
+     *
+     * @param eventStart start date (+ time) of the event task.
+     * @param eventEnd end date (+ time) of the event task.
+     * @param targetDate date being queried.
+     * @return true if deadline is due on the same day as target date, else false.
+     */
+    public static boolean isOccurringOn(LocalDateTime eventStart, LocalDateTime eventEnd, LocalDate targetDate) {
+        return (!targetDate.isBefore(eventStart.toLocalDate()) && !targetDate.isAfter(eventEnd.toLocalDate()));
+    }
+
+    /**
+     * Evaluates if a task is due by a specific date.
+     *
+     * @param taskDate date (+ time) of the deadline task.
+     * @param targetDate date being queried.
+     * @return true if deadline is due on the same day as target date, else false.
+     */
+    public static boolean isDueBy(LocalDateTime taskDate, LocalDate targetDate) {
+        return !taskDate.toLocalDate().isAfter(targetDate);
     }
 }

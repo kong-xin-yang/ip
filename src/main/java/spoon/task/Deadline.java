@@ -15,6 +15,11 @@ public class Deadline extends Task {
         this.deadline = DateFormat.parse(deadline);
     }
 
+    // Getters
+    public DateFormat.ParseResult getDeadline() {
+        return deadline;
+    }
+
     // Methods
     @Override
     public String format() {

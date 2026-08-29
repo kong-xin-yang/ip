@@ -8,6 +8,8 @@ import spoon.task.Task;
 import spoon.task.TaskList;
 import spoon.ui.UserInterface;
 
+import java.time.LocalDate;
+
 /**
  * The root of the Spoon chatbot.
  * Main entry point + implementation logic.
@@ -83,6 +85,32 @@ public class Spoon {
                 }
 
                 storage.save(tasks.getTasks());
+                break;
+            }
+
+            // Check for tasks on or by a specific date command
+            case ON, BY: {
+                // Check for errors
+                LocalDate targetDate = Parser.checkDate(input);
+
+                switch (command) {
+                    // On command
+                    case ON: {
+                        TaskList filteredTasks = tasks.getTasksOn(targetDate);
+                        userInterface.showFilteredTasks(filteredTasks, targetDate, "On");
+                        break;
+                    }
+                    // By command
+                    case BY: {
+                        TaskList filteredTasks = tasks.getTasksBy(targetDate);
+                        userInterface.showFilteredTasks(filteredTasks, targetDate, "By");
+                        break;
+                    }
+                    // Default: placeholder value, should never happen
+                    default: {
+                        throw new FatalErrorException();
+                    }
+                }
                 break;
             }
 

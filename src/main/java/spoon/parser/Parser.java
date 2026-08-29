@@ -1,5 +1,7 @@
 package spoon.parser;
 
+import java.time.LocalDate;
+
 import spoon.task.Deadline;
 import spoon.task.Event;
 import spoon.command.Command;
@@ -7,6 +9,7 @@ import spoon.exception.*;
 import spoon.task.Task;
 import spoon.task.TaskList;
 import spoon.task.ToDo;
+import spoon.util.DateFormat;
 
 /**
  * Handles the input parsing of Spoon.
@@ -64,6 +67,23 @@ public class Parser {
         }
 
         return index - 1;
+    }
+
+    /**
+     * Checks for exceptions in On and By commands.
+     *
+     * @param input user input.
+     * @return inputArray parsed from user input.
+     */
+    public static LocalDate checkDate(String input) throws SpoonException {
+        String[] inputArray = parseInput(input);
+        Command command = parseCommand(input);
+
+        if (inputArray.length < 2 || inputArray[1].isBlank()) {
+            throw new MissingArgumentException(command.toString().toLowerCase(), "index");
+        }
+
+        return DateFormat.parse(inputArray[1]).dateTime().toLocalDate();
     }
 
     /**

@@ -21,6 +21,15 @@ public class Event extends Task {
         }
     }
 
+    // Getters
+    public DateFormat.ParseResult getStartDate() {
+        return startDate;
+    }
+
+    public DateFormat.ParseResult getEndDate() {
+        return endDate;
+    }
+
     // Methods
     @Override
     public String format() {
