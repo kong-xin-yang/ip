@@ -1,6 +1,6 @@
 package spoon.exception;
 
-public class InvalidArgumentException extends RuntimeException {
+public class InvalidArgumentException extends SpoonException {
 
     // Constructor
     public InvalidArgumentException(String message) {
