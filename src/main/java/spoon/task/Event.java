@@ -4,6 +4,8 @@ import spoon.exception.InvalidArgumentException;
 import spoon.exception.InvalidFormatException;
 import spoon.util.DateFormat;
 
+import java.time.LocalDate;
+
 /**
  * Represents an Event (subclass of Task) with additional fields startDate and endDate.
  */
@@ -21,27 +23,28 @@ public class Event extends Task {
         }
     }
 
-    // Getters
-    public DateFormat.ParseResult getStartDate() {
-        return startDate;
-    }
-
-    public DateFormat.ParseResult getEndDate() {
-        return endDate;
-    }
-
     // Methods
     @Override
+    public boolean isDueOn(LocalDate date) {
+        return DateFormat.isOccurringOn(startDate.dateTime(), endDate.dateTime(), date);
+    }
+
+    @Override
+    public boolean isDueBy(LocalDate date) {
+        return DateFormat.isDueBy(startDate.dateTime(), date);
+    }
+
+    @Override
     public String format() {
-        return "E | " + super.format() +
-                " | " + DateFormat.toStorage(startDate) +
-                " | " + DateFormat.toStorage(endDate);
+        return "E | " + super.format()
+                + " | " + DateFormat.toStorage(startDate)
+                + " | " + DateFormat.toStorage(endDate);
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() +
-                " (from: " + DateFormat.toDisplay(startDate) +
-                " to: " + DateFormat.toDisplay(endDate) + ")";
+        return "[E]" + super.toString()
+                + " (from: " + DateFormat.toDisplay(startDate)
+                + " to: " + DateFormat.toDisplay(endDate) + ")";
     }
 }

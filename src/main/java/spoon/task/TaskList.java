@@ -3,8 +3,6 @@ package spoon.task;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import spoon.util.DateFormat;
-
 /**
  * Handles the task list of Spoon.
  */
@@ -12,6 +10,10 @@ public class TaskList {
     private final ArrayList<Task> tasks;
 
     // Constructor
+    public TaskList() {
+        this.tasks = new ArrayList<>();
+    }
+
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks != null ? tasks : new ArrayList<>();
     }
@@ -45,14 +47,7 @@ public class TaskList {
     public TaskList getTasksOn(LocalDate date) {
         ArrayList<Task> filteredTasks = new ArrayList<>();
         for (Task task : tasks) {
-            // Safe to type cast here: task MUST be an instance of Deadline
-            if (task instanceof Deadline &&
-                    DateFormat.isDueOn(((Deadline) task).getDeadline().dateTime(), date)) {
-                filteredTasks.add(task);
-            // Safe to type cast here: task MUST be an instance of Event
-            } else if (task instanceof Event && DateFormat.isOccurringOn(
-                    ((Event) task).getStartDate().dateTime(),
-                    ((Event) task).getEndDate().dateTime(), date)) {
+            if (task.isDueOn(date)) {
                 filteredTasks.add(task);
             }
         }
@@ -69,12 +64,7 @@ public class TaskList {
     public TaskList getTasksBy(LocalDate date) {
         ArrayList<Task> filteredTasks = new ArrayList<>();
         for (Task task : tasks) {
-            // Safe to type cast here: task MUST be an instance of Deadline (in the first case)
-            // and an instance of Event (in the second case)
-            if ((task instanceof Deadline &&
-                    DateFormat.isDueBy(((Deadline) task).getDeadline().dateTime(), date)) ||
-                    (task instanceof Event &&
-                    DateFormat.isDueBy(((Event) task).getStartDate().dateTime(), date))) {
+            if (task.isDueBy(date)) {
                 filteredTasks.add(task);
             }
         }

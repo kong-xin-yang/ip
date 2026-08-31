@@ -1,5 +1,7 @@
 package spoon.task;
 
+import java.time.LocalDate;
+
 /**
  * Represents a generic task with fields name and isCompleted.
  */
@@ -24,6 +26,24 @@ public abstract class Task {
 
     public void uncomplete() {
         this.isCompleted = false;
+    }
+
+    /**
+     * Determines if the task is due on a specific date.
+     *
+     * @return boolean if the task is due on a specific date.
+     */
+    public boolean isDueOn(LocalDate date) {
+        return false;
+    }
+
+    /**
+     * Determines if the task is due on a specific date.
+     *
+     * @return boolean if the task is due on a specific date.
+     */
+    public boolean isDueBy(LocalDate date) {
+        return false;
     }
 
     /**

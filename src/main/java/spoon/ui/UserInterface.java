@@ -3,6 +3,7 @@ package spoon.ui;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import spoon.command.Command;
 import spoon.task.Task;
 import spoon.task.TaskList;
 import spoon.util.DateFormat;
@@ -17,6 +18,9 @@ public class UserInterface {
     private static final String INTRODUCTION = "Hello, I'm Spoon, your friendly neighbourhood chatbot!"
             + System.lineSeparator() +
             "What do you wanna talk about?";
+    private static final String LOAD_SUCCESSFUL = "Tasks loaded! Time to get to work!" + System.lineSeparator();
+    private static final String LOADING_ERROR = "Error reading storage file: %s" + System.lineSeparator();
+    private static final String WRITING_ERROR = "Error writing to storage file: %s" + System.lineSeparator();
     private static final String LIST_EMPTY = "Nothing here yet...";
     private static final String TASK_ADDED = "I've added this task to the list! :)";
     private static final String LIST_LENGTH = "Now, you have %d task(s)! \uD83D\uDC4D" + System.lineSeparator();
@@ -25,6 +29,7 @@ public class UserInterface {
     private static final String MARK_COMPLETE = "YAYYYY, task complete!";
     private static final String MARK_INCOMPLETE = "Oops, there's more work to be done!";
     private static final String DELETE_TASK = "Okay, task deleted!";
+    private static final String SAVE_SUCCESS = "Tasks saved! Ready for next time!";
     private static final String EXIT = "Goodbye! Let's speak again soon!";
 
     private final Scanner scanner;
@@ -55,6 +60,18 @@ public class UserInterface {
         System.out.println(message);
     }
 
+    // Methods for printing interactions with storage (external file)
+    public void printLoadSuccess() {
+        System.out.println(LOAD_SUCCESSFUL);
+    }
+
+    public void printLoadingError(String message) {
+        System.out.printf(LOADING_ERROR, message);
+    }
+
+    public void printWritingError(String message) {
+        System.out.printf(WRITING_ERROR, message);
+    }
     // Methods for printing interactions with the task list
     public void showTaskList(TaskList tasks) {
         if (tasks.size() == 0) {
@@ -90,16 +107,17 @@ public class UserInterface {
     }
 
     /**
-     * Prints the tasks occurring on the date.
+     * Prints the tasks occurring on / by the date.
      *
      * @param tasks list of tasks to be printed.
-     * @param date date where the tasks occur by.
+     * @param date date where the tasks occur on / by.
+     * @param connective string to be inserted into output message.
      */
-    public void showFilteredTasks(TaskList tasks, LocalDate date, String connective) {
+    public void showFilteredTasks(TaskList tasks, LocalDate date, Command connective) {
         if (tasks.size() == 0) {
             System.out.println(LIST_EMPTY);
         } else {
-            System.out.printf(TASK_FILTER, connective, DateFormat.toDisplay(date));
+            System.out.printf(TASK_FILTER, connective.toString().toLowerCase(), DateFormat.toDisplay(date));
             for (int i = 0; i < tasks.size(); i++) {
                 System.out.println((i + 1) + ". " + tasks.get(i));
             }
@@ -112,7 +130,7 @@ public class UserInterface {
     }
 
     public void printSave() {
-        System.out.println("Tasks saved! Ready for next time!");
+        System.out.println(SAVE_SUCCESS);
     }
 
     public void printExit() {

@@ -48,7 +48,7 @@ public class Parser {
      */
     public static int checkEdit(String input, TaskList tasks) throws SpoonException{
         String[] inputArray = parseInput(input);
-        Command command = parseCommand(input);
+        Command command = Command.fromString(inputArray[0]);
 
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
             throw new MissingArgumentException(command.toString().toLowerCase(), "index");
@@ -74,14 +74,15 @@ public class Parser {
      * Checks for exceptions in On and By commands.
      *
      * @param input user input.
-     * @return inputArray parsed from user input.
+     * @return date for task filtering.
+     * @throws MissingArgumentException if argument for task filtering is missing.
      */
     public static LocalDate checkDate(String input) throws SpoonException {
         String[] inputArray = parseInput(input);
-        Command command = parseCommand(input);
+        Command command = Command.fromString(inputArray[0]);
 
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
-            throw new MissingArgumentException(command.toString().toLowerCase(), "index");
+            throw new MissingArgumentException(command.toString().toLowerCase(), "date");
         }
 
         return DateFormat.parse(inputArray[1]).dateTime().toLocalDate();
@@ -92,15 +93,15 @@ public class Parser {
      *
      * @param input user input.
      * @return task initialized with command.
-     * @throws MissingArgumentException if argument(s) for task initialization is missing.
+     * @throws MissingArgumentException if argument(s) for task initialization are missing.
      * @throws InvalidFormatException if argument(s) for task initialization are in the wrong datetime format.
      * @throws InvalidArgumentException if arguments for task initialization are invalid (i.e. end date before start date).
      * @throws FatalErrorException as a placeholder (should never happen).
      */
     public static Task checkAdd(String input) throws SpoonException {
         String[] inputArray = parseInput(input);
-        Command command = parseCommand(input);
-        String commandString = command.toString().toLowerCase();
+        Command command = Command.fromString(inputArray[0]);
+        String commandString = inputArray[0].toLowerCase();
 
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
             throw new MissingArgumentException(commandString, "description");
@@ -129,7 +130,7 @@ public class Parser {
                     throw new MissingArgumentException(commandString, "description");
                 }
                 String[] eventArray = inputArray[1].split("\\s+/from\\s+", 2);
-                if (eventArray.length < 2 || eventArray[1].isBlank() || eventArray[1].startsWith("(?i)/to")) {
+                if (eventArray.length < 2 || eventArray[1].isBlank() || eventArray[1].matches("(?i)^/to.*")) {
                     throw new MissingArgumentException(commandString, "start date (starting with /from)");
                 }
                 String[] eventArgsArray = eventArray[1].split("\\s+/to\\s+", 2);

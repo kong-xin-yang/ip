@@ -8,6 +8,7 @@ import spoon.task.Task;
 import spoon.task.TaskList;
 import spoon.ui.UserInterface;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 /**
@@ -31,7 +32,20 @@ public class Spoon {
     public Spoon() {
         this.userInterface = new UserInterface();
         this.storage = new Storage(FILE_PATH);
-        this.tasks = new TaskList(storage.load());
+
+        TaskList tempTasks;
+        try {
+            tempTasks = new TaskList(storage.load());
+            userInterface.printLoadSuccess();
+        } catch (IOException e) {
+            userInterface.printLoadingError(e.getMessage());
+            tempTasks = new TaskList();
+        } catch (SpoonException e) {
+            userInterface.printError(e.getMessage());
+            tempTasks = new TaskList();
+        }
+        this.tasks = tempTasks;
+
     }
 
     // Methods
@@ -84,7 +98,11 @@ public class Spoon {
                     }
                 }
 
-                storage.save(tasks.getTasks());
+                try {
+                    storage.save(tasks.getTasks());
+                } catch (IOException e) {
+                    userInterface.printWritingError(e.getMessage());
+                }
                 break;
             }
 
@@ -97,13 +115,13 @@ public class Spoon {
                     // On command
                     case ON: {
                         TaskList filteredTasks = tasks.getTasksOn(targetDate);
-                        userInterface.showFilteredTasks(filteredTasks, targetDate, "On");
+                        userInterface.showFilteredTasks(filteredTasks, targetDate, Command.ON);
                         break;
                     }
                     // By command
                     case BY: {
                         TaskList filteredTasks = tasks.getTasksBy(targetDate);
-                        userInterface.showFilteredTasks(filteredTasks, targetDate, "By");
+                        userInterface.showFilteredTasks(filteredTasks, targetDate, Command.BY);
                         break;
                     }
                     // Default: placeholder value, should never happen
@@ -116,16 +134,17 @@ public class Spoon {
 
             // Add todos, deadlines or events command
             case TODO, DEADLINE, EVENT: {
-                try {
-                    // Check for errors
-                    Task task = Parser.checkAdd(input);
-                    // Add command
-                    tasks.add(task);
-                    userInterface.showAdded(task, tasks.size());
-                } catch (SpoonException e) {
-                    userInterface.printError(e.getMessage());
-                }
+                // Check for errors
+                Task task = Parser.checkAdd(input);
+                // Add command
+                tasks.add(task);
+                userInterface.showAdded(task, tasks.size());
 
+                try {
+                    storage.save(tasks.getTasks());
+                } catch (IOException e) {
+                    userInterface.printWritingError(e.getMessage());
+                }
                 break;
             }
             // Command.UNKNOWN and default: command not recognized
@@ -165,10 +184,15 @@ public class Spoon {
         }
 
         // Save + clean up
-        userInterface.close();
-        storage.save(tasks.getTasks());
-        userInterface.printSave();
-        userInterface.printExit();
+        try {
+            storage.save(tasks.getTasks());
+            userInterface.printSave();
+            userInterface.printExit();
+            userInterface.close();
+        } catch (IOException e) {
+            userInterface.printWritingError(e.getMessage());
+        }
+
     }
 
     // Entry point

@@ -28,6 +28,7 @@ public class DateFormat {
      * Parses a string into a LocalDate or LocalDateTime.
      * Supports both "dd/MM/yyyy" and "dd/MM/yyyy HHmm".
      *
+     * @param input the date to be parsed.
      * @return a ParseResult containing both the date (+ time) and a boolean representing if time is included.
      */
     public static ParseResult parse(String input) throws InvalidFormatException {
@@ -103,7 +104,7 @@ public class DateFormat {
      * @return true if deadline is due on the same day as target date, else false.
      */
     public static boolean isOccurringOn(LocalDateTime eventStart, LocalDateTime eventEnd, LocalDate targetDate) {
-        return (!targetDate.isBefore(eventStart.toLocalDate()) && !targetDate.isAfter(eventEnd.toLocalDate()));
+        return !targetDate.isBefore(eventStart.toLocalDate()) && !targetDate.isAfter(eventEnd.toLocalDate());
     }
 
     /**

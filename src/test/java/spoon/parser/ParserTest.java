@@ -64,7 +64,7 @@ public class ParserTest {
 
         @BeforeEach
         void setUp() {
-            testTaskList = new TaskList(new ArrayList<>());
+            testTaskList = new TaskList();
             testTaskList.add(new ToDo("Task 1"));
             testTaskList.add(new ToDo("Task 2"));
             testTaskList.add(new ToDo("Task 3"));
