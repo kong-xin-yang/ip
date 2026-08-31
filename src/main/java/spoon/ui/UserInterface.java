@@ -1,7 +1,7 @@
 package spoon.ui;
 
-import java.util.Scanner;
 import java.time.LocalDate;
+import java.util.Scanner;
 
 import spoon.task.Task;
 import spoon.task.TaskList;

@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import spoon.task.Deadline;
-import spoon.task.Event;
 import spoon.exception.SpoonException;
 import spoon.exception.FileCorruptedException;
+import spoon.task.Deadline;
+import spoon.task.Event;
 import spoon.task.Task;
 import spoon.task.ToDo;
 
