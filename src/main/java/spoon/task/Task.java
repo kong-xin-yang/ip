@@ -47,6 +47,16 @@ public abstract class Task {
     }
 
     /**
+     * Checks if the task contains the specfied word.
+     *
+     * @param word the word to search for.
+     * @return true if the task contains the specified word, else false.
+     */
+    public boolean containsWord(String word) {
+        return this.name.toLowerCase().contains(word.toLowerCase());
+    }
+
+    /**
      * Formats the task into string for writing to the file.
      *
      * @return file-formatted representation of task.

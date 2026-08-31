@@ -38,7 +38,7 @@ public class Parser {
     }
 
     /**
-     * Checks for exceptions in mark, unmark and delete commands.
+     * Checks for exceptions in MARK, UNMARK and DELETE commands.
      *
      * @param input user input.
      * @return index of task with respect to the list of tasks.
@@ -71,7 +71,7 @@ public class Parser {
     }
 
     /**
-     * Checks for exceptions in On and By commands.
+     * Checks for exceptions in ON and BY commands.
      *
      * @param input user input.
      * @return date for task filtering.
@@ -86,6 +86,21 @@ public class Parser {
         }
 
         return DateFormat.parse(inputArray[1]).dateTime().toLocalDate();
+    }
+
+    /**
+     * Checks for exceptions in the FIND command.
+     *
+     * @param input user input.
+     * @return word to search for.
+     * @throws MissingArgumentException if the keyword argument is missing.
+     */
+    public static String checkFind(String input) throws SpoonException {
+        String[] inputArray = parseInput(input);
+        if (inputArray.length < 2 || inputArray[1].isBlank()) {
+            throw new MissingArgumentException("find", "keyword");
+        }
+        return inputArray[1].trim();
     }
 
     /**
