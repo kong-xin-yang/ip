@@ -52,6 +52,7 @@ public class ParserTest {
             assertEquals(Command.DELETE, Parser.parseCommand("delete 1"));
             assertEquals(Command.ON, Parser.parseCommand("on 01/01/0001"));
             assertEquals(Command.BY, Parser.parseCommand("by 01/01/0001"));
+            assertEquals(Command.FIND, Parser.parseCommand("find word"));
             assertEquals(Command.TODO, Parser.parseCommand("todo task"));
             assertEquals(Command.DEADLINE, Parser.parseCommand("deadline task /by 01/01/0101 0101"));
             assertEquals(Command.EVENT, Parser.parseCommand("event task /from 01/01/0001 /to 02/01/0001"));

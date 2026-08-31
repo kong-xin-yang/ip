@@ -132,6 +132,14 @@ public class Spoon {
                 break;
             }
 
+            // Filter all tasks that contain a word command
+            case FIND: {
+                String word = Parser.checkFind(input);
+                TaskList filteredTasks = tasks.findTasks(word);
+                userInterface.showFilteredTasks(filteredTasks, word);
+                break;
+            }
+
             // Add todos, deadlines or events command
             case TODO, DEADLINE, EVENT: {
                 // Check for errors

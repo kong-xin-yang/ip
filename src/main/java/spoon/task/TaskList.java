@@ -72,4 +72,21 @@ public class TaskList {
         return new TaskList(filteredTasks);
     }
 
+    /**
+     * Finds all tasks whose description contains the specified word.
+     *
+     * @param word the word to search for.
+     * @return a TaskList of tasks matching the keyword.
+     */
+    public TaskList findTasks(String word) {
+        // TODO: change after merge
+        TaskList filteredTasks = new TaskList(new ArrayList<>());
+        for (Task task : tasks) {
+            if (task.containsWord(word)) {
+                filteredTasks.add(task);
+            }
+        }
+        return filteredTasks;
+    }
+
 }

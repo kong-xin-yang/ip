@@ -124,6 +124,22 @@ public class UserInterface {
         }
     }
 
+    /**
+     * Displays the list of tasks matching a search keyword.
+     *
+     * @param tasks list of matching tasks.
+     */
+    public void showFilteredTasks(TaskList tasks, String word) {
+        if (tasks.size() == 0) {
+            System.out.println(LIST_EMPTY);
+            return;
+        }
+        System.out.printf(TASK_FILTER, "contains", word);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + ". " + tasks.get(i));
+        }
+    }
+
     // Methods for closing Spoon
     public void close() {
         scanner.close();
