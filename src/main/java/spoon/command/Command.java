@@ -17,6 +17,12 @@ public enum Command {
     EVENT,
     UNKNOWN;
 
+    /**
+     * Converts an input to its corresponding command.
+     *
+     * @param input the user input.
+     * @return the corresponding command.
+     */
     public static Command fromString(String input) {
         if (input == null || input.isBlank()) {
             return UNKNOWN;

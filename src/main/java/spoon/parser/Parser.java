@@ -2,7 +2,6 @@ package spoon.parser;
 
 import java.time.LocalDate;
 
-
 import spoon.command.Command;
 import spoon.exception.*;
 import spoon.task.Deadline;
@@ -46,7 +45,7 @@ public class Parser {
      * @throws InvalidFormatException if argument is not a number.
      * @throws IndexOutOfRangeException if argument is not within bounds.
      */
-    public static int checkEdit(String input, TaskList tasks) throws SpoonException{
+    public static int checkEdit(String input, TaskList tasks) throws SpoonException {
         String[] inputArray = parseInput(input);
         Command command = Command.fromString(inputArray[0]);
 
@@ -110,7 +109,8 @@ public class Parser {
      * @return task initialized with command.
      * @throws MissingArgumentException if argument(s) for task initialization are missing.
      * @throws InvalidFormatException if argument(s) for task initialization are in the wrong datetime format.
-     * @throws InvalidArgumentException if arguments for task initialization are invalid (i.e. end date before start date).
+     * @throws InvalidArgumentException if arguments for task initialization are invalid
+     *     (i.e. end date before start date).
      * @throws FatalErrorException as a placeholder (should never happen).
      */
     public static Task checkAdd(String input) throws SpoonException {

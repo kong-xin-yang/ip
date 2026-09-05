@@ -16,8 +16,7 @@ public class UserInterface {
     private static final String DIVIDER = "-".repeat(80);
     private static final String BANNER = "~~~ Welcome to Spoon ~~~";
     private static final String INTRODUCTION = "Hello, I'm Spoon, your friendly neighbourhood chatbot!"
-            + System.lineSeparator() +
-            "What do you wanna talk about?";
+            + System.lineSeparator() + "What do you wanna talk about?";
     private static final String LOAD_SUCCESSFUL = "Tasks loaded! Time to get to work!" + System.lineSeparator();
     private static final String LOADING_ERROR = "Error reading storage file: %s" + System.lineSeparator();
     private static final String WRITING_ERROR = "Error writing to storage file: %s" + System.lineSeparator();

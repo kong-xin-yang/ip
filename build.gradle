@@ -42,6 +42,10 @@ application {
     mainClass = 'spoon.Spoon'
 }
 
+checkstyle {
+    toolVersion = '14.1.0'
+}
+
 jar {
     // A lean JAR file (i.e., without the dependencies packaged inside) is not needed.
     enabled = false

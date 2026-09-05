@@ -1,16 +1,15 @@
 package spoon.parser;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import spoon.command.Command;
 import spoon.exception.*;
@@ -72,7 +71,7 @@ public class ParserTest {
         }
 
         @Test
-        void checkEdit_validIndex_returnsZeroBasedIndex() throws SpoonException{
+        void checkEdit_validIndex_returnsZeroBasedIndex() throws SpoonException {
             assertEquals(0, Parser.checkEdit("mark 1", testTaskList));
             assertEquals(2, Parser.checkEdit("unmark 3", testTaskList));
         }
@@ -153,11 +152,13 @@ public class ParserTest {
         @Test
         void checkAdd_eventMissingComponents_throwsMissingArgumentException() {
             // Missing description before /from or /to
-            assertThrows(MissingArgumentException.class, () -> Parser.checkAdd("event /from 01/01/0001 /to 01/01/0001"));
+            assertThrows(MissingArgumentException.class, () -> Parser.checkAdd(
+                    "event /from 01/01/0001 /to 01/01/0001"));
             assertThrows(MissingArgumentException.class, () -> Parser.checkAdd("event /from 01/01/0001 0101"));
             assertThrows(MissingArgumentException.class, () -> Parser.checkAdd("event /to 01/01/0001"));
             // Missing /from flag
-            assertThrows(MissingArgumentException.class, () -> Parser.checkAdd("event task 01/01/0001 0101 /to 01/01/0001 0101"));
+            assertThrows(MissingArgumentException.class, () -> Parser.checkAdd(
+                    "event task 01/01/0001 0101 /to 01/01/0001 0101"));
             // Missing date after /from
             assertThrows(MissingArgumentException.class, () -> Parser.checkAdd("event task /from /to 01/01/0001"));
             // Missing /to flag
