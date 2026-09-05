@@ -140,9 +140,9 @@ class DateFormatTest {
             LocalDateTime start = LocalDateTime.of(1, 1, 10, 1, 1);
             LocalDateTime end = LocalDateTime.of(1, 1, 20, 1, 1);
 
-            assertTrue(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 10))); // Start boundary
-            assertTrue(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 15))); // Middle
-            assertTrue(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 20))); // End boundary
+            assertTrue(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 10)));
+            assertTrue(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 15)));
+            assertTrue(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 20)));
         }
 
         @Test
@@ -150,23 +150,23 @@ class DateFormatTest {
             LocalDateTime start = LocalDateTime.of(1, 1, 10, 1, 1);
             LocalDateTime end = LocalDateTime.of(1, 1, 20, 1, 1);
 
-            assertFalse(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 9)));  // Before
-            assertFalse(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 21))); // After
+            assertFalse(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 9)));
+            assertFalse(DateFormat.isOccurringOn(start, end, LocalDate.of(1, 1, 21)));
         }
 
         @Test
         void isDueBy_targetDateOnOrAfterTaskDate_returnsTrue() {
             LocalDateTime taskDate = LocalDateTime.of(1, 1, 10, 1, 1);
 
-            assertTrue(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 10))); // Exact day
-            assertTrue(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 21))); // After
+            assertTrue(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 10)));
+            assertTrue(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 21)))
         }
 
         @Test
         void isDueBy_targetDateBeforeTaskDate_returnsFalse() {
             LocalDateTime taskDate = LocalDateTime.of(1, 1, 10, 1, 1);
 
-            assertFalse(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 9))); // Before
+            assertFalse(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 9)));
         }
     }
 }

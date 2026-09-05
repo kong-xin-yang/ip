@@ -1,9 +1,9 @@
 package spoon.task;
 
+import java.time.LocalDate;
+
 import spoon.exception.InvalidFormatException;
 import spoon.util.DateFormat;
-
-import java.time.LocalDate;
 
 /**
  * Represents a Deadline (subclass of Task) with additional field deadline.
