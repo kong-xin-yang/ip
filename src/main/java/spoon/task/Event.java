@@ -1,10 +1,10 @@
 package spoon.task;
 
+import java.time.LocalDate;
+
 import spoon.exception.InvalidArgumentException;
 import spoon.exception.InvalidFormatException;
 import spoon.util.DateFormat;
-
-import java.time.LocalDate;
 
 /**
  * Represents an Event (subclass of Task) with additional fields startDate and endDate.
@@ -14,7 +14,8 @@ public class Event extends Task {
     private final DateFormat.ParseResult endDate;
 
     // Constructor
-    public Event(String name, String startDate, String endDate) throws InvalidFormatException, InvalidArgumentException {
+    public Event(String name, String startDate, String endDate) throws
+            InvalidFormatException, InvalidArgumentException {
         super(name);
         this.startDate = DateFormat.parse(startDate);
         this.endDate = DateFormat.parse(endDate);

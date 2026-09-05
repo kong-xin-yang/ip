@@ -1,5 +1,8 @@
 package spoon;
 
+import java.io.IOException;
+import java.time.LocalDate;
+
 import spoon.command.Command;
 import spoon.exception.*;
 import spoon.parser.Parser;
@@ -7,9 +10,6 @@ import spoon.storage.Storage;
 import spoon.task.Task;
 import spoon.task.TaskList;
 import spoon.ui.UserInterface;
-
-import java.io.IOException;
-import java.time.LocalDate;
 
 /**
  * The root of the Spoon chatbot.
@@ -29,6 +29,9 @@ public class Spoon {
     private final TaskList tasks;
 
     // Constructor
+    /**
+     * Creates an instance of Spoon.
+     */
     public Spoon() {
         this.userInterface = new UserInterface();
         this.storage = new Storage(FILE_PATH);
