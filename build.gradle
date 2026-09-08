@@ -39,7 +39,7 @@ test {
 }
 
 application {
-    mainClass = 'spoon.Spoon'
+    mainClass = 'spoon.Launcher'
 }
 
 checkstyle {
