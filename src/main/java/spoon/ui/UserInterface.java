@@ -27,7 +27,7 @@ public class UserInterface {
     private static final String TASK_FILTER = "Filter criteria: %s %s" + System.lineSeparator();
     private static final String MARK_COMPLETE = "YAYYYY, task complete!";
     private static final String MARK_INCOMPLETE = "Oops, there's more work to be done!";
-    private static final String DELETE_TASK = "Okay, task deleted!";
+    private static final String TASK_DELETED = "Okay, task deleted!";
     private static final String SAVE_SUCCESS = "Tasks saved! Ready for next time!";
     private static final String EXIT = "Goodbye! Let's speak again soon!";
 
@@ -44,65 +44,67 @@ public class UserInterface {
     }
 
     // Methods for printing pre-defined texts
-    public void printDivider() {
-        System.out.println(DIVIDER);
+    public String showDivider() {
+        return DIVIDER + System.lineSeparator();
     }
 
-    public void printStart() {
-        System.out.println(BANNER);
-        printDivider();
-        System.out.println(INTRODUCTION);
-        printDivider();
+    public String showStart() {
+        return BANNER + System.lineSeparator()
+                + showDivider()
+                + INTRODUCTION + System.lineSeparator()
+                + showDivider();
     }
 
-    public void printError(String message) {
-        System.out.println(message);
+    public String showError(String message) {
+        return message + System.lineSeparator();
     }
 
     // Methods for printing interactions with storage (external file)
-    public void printLoadSuccess() {
-        System.out.println(LOAD_SUCCESSFUL);
+    public String showLoadSuccess() {
+        return LOAD_SUCCESSFUL + System.lineSeparator();
     }
 
-    public void printLoadingError(String message) {
-        System.out.printf(LOADING_ERROR, message);
+    public String showLoadingError(String message) {
+        return String.format(LOADING_ERROR, message) + System.lineSeparator();
     }
 
-    public void printWritingError(String message) {
-        System.out.printf(WRITING_ERROR, message);
+    public String showWritingError(String message) {
+        return String.format(WRITING_ERROR, message) + System.lineSeparator();
     }
+
     // Methods for printing interactions with the task list
-    public void showTaskList(TaskList tasks) {
+    public String showTaskList(TaskList tasks) {
         if (tasks.size() == 0) {
-            System.out.println(LIST_EMPTY);
+            return LIST_EMPTY + System.lineSeparator();
         } else {
-            System.out.println(LIST_INTRODUCTION);
+            String message = LIST_INTRODUCTION + System.lineSeparator();
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.println((i + 1) + ". " + tasks.get(i));
+                message += (i + 1) + ". " + tasks.get(i) + System.lineSeparator();
             }
+            return message;
         }
     }
 
-    public void showAdded(Task task, int taskSize) {
-        System.out.println(TASK_ADDED);
-        System.out.println(task);
-        System.out.printf(LIST_LENGTH, taskSize);
+    public String showAdded(Task task, int totalTasks) {
+        return TASK_ADDED + System.lineSeparator()
+                + task + System.lineSeparator()
+                + String.format(LIST_LENGTH, totalTasks) + System.lineSeparator();
     }
 
-    public void showMarked(Task task) {
-        System.out.println(MARK_COMPLETE);
-        System.out.println(task);
+    public String showMarked(Task task) {
+        return MARK_COMPLETE + System.lineSeparator()
+                + task + System.lineSeparator();
     }
 
-    public void showUnmarked(Task task) {
-        System.out.println(MARK_INCOMPLETE);
-        System.out.println(task);
+    public String showUnmarked(Task task) {
+        return MARK_INCOMPLETE + System.lineSeparator()
+                + task + System.lineSeparator();
     }
 
-    public void showDeleted(Task task, int totalTasks) {
-        System.out.println(DELETE_TASK);
-        System.out.println(task);
-        System.out.printf(LIST_LENGTH, totalTasks);
+    public String showDeleted(Task task, int totalTasks) {
+        return TASK_DELETED + System.lineSeparator()
+                + task + System.lineSeparator()
+                + String.format(LIST_LENGTH, totalTasks) + System.lineSeparator();
     }
 
     /**
@@ -111,15 +113,18 @@ public class UserInterface {
      * @param tasks list of tasks to be printed.
      * @param date date where the tasks occur on / by.
      * @param connective string to be inserted into output message.
+     * @return formatted string of all filtered tasks.
      */
-    public void showFilteredTasks(TaskList tasks, LocalDate date, Command connective) {
+    public String showFilteredTasks(TaskList tasks, LocalDate date, Command connective) {
         if (tasks.size() == 0) {
-            System.out.println(LIST_EMPTY);
+            return LIST_EMPTY + System.lineSeparator();
         } else {
-            System.out.printf(TASK_FILTER, connective.toString().toLowerCase(), DateFormat.toDisplay(date));
+            String message = String.format(TASK_FILTER, connective.toString().toLowerCase(),
+                    DateFormat.toDisplay(date)) + System.lineSeparator();
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.println((i + 1) + ". " + tasks.get(i));
+                message += (i + 1) + ". " + tasks.get(i) + System.lineSeparator();
             }
+            return message;
         }
     }
 
@@ -127,28 +132,37 @@ public class UserInterface {
      * Displays the list of tasks matching a search keyword.
      *
      * @param tasks list of matching tasks.
+     * @return formatted string of all filtered tasks.
      */
-    public void showFilteredTasks(TaskList tasks, String word) {
+    public String showFilteredTasks(TaskList tasks, String word) {
         if (tasks.size() == 0) {
-            System.out.println(LIST_EMPTY);
-            return;
-        }
-        System.out.printf(TASK_FILTER, "contains", word);
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
+            return LIST_EMPTY + System.lineSeparator();
+        } else {
+            String message = String.format(TASK_FILTER, "contains", word)
+                    + System.lineSeparator();
+            for (int i = 0; i < tasks.size(); i++) {
+                message += (i + 1) + ". " + tasks.get(i) + System.lineSeparator();
+            }
+            return message;
         }
     }
 
     // Methods for closing Spoon
+
+    public String showSave() {
+        return SAVE_SUCCESS + System.lineSeparator();
+    }
+
+    public String showExit() {
+        return EXIT + System.lineSeparator();
+    }
+
     public void close() {
         scanner.close();
     }
 
-    public void printSave() {
-        System.out.println(SAVE_SUCCESS);
-    }
-
-    public void printExit() {
-        System.out.println(EXIT);
+    // Method for printing to terminal (CLI)
+    public void print(String message) {
+        System.out.print(message);
     }
 }

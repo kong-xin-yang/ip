@@ -39,12 +39,12 @@ public class Spoon {
         TaskList tempTasks;
         try {
             tempTasks = new TaskList(storage.load());
-            userInterface.printLoadSuccess();
+            userInterface.print(userInterface.showLoadSuccess());
         } catch (IOException e) {
-            userInterface.printLoadingError(e.getMessage());
+            userInterface.print(userInterface.showLoadingError(e.getMessage()));
             tempTasks = new TaskList();
         } catch (SpoonException e) {
-            userInterface.printError(e.getMessage());
+            userInterface.print(userInterface.showError(e.getMessage()));
             tempTasks = new TaskList();
         }
         this.tasks = tempTasks;
@@ -59,13 +59,20 @@ public class Spoon {
      * @throws SpoonException if an exception is detected (refer to the different exceptions).
      * @throws InvalidCommandException if a command is invalid.
      */
-    private void executeCommand(String input) throws SpoonException {
+    private String executeCommand(String input) throws SpoonException {
         Command command = Parser.parseCommand(input);
+        String response;
 
         switch (command) {
+            // Exit command
+            case BYE: {
+                response = userInterface.showExit();
+                break;
+            }
+
             // List command
             case LIST: {
-                userInterface.showTaskList(tasks);
+                response = userInterface.showTaskList(tasks);
                 break;
             }
 
@@ -80,19 +87,19 @@ public class Spoon {
                     // Mark command
                     case MARK: {
                         task.complete();
-                        userInterface.showMarked(task);
+                        response = userInterface.showMarked(task);
                         break;
                     }
                     // Unmark command
                     case UNMARK: {
                         task.uncomplete();
-                        userInterface.showUnmarked(task);
+                        response = userInterface.showUnmarked(task);
                         break;
                     }
                     // Delete command
                     case DELETE: {
                         tasks.delete(index);
-                        userInterface.showDeleted(task, tasks.size());
+                        response = userInterface.showDeleted(task, tasks.size());
                         break;
                     }
                     // Default: placeholder value, should never happen
@@ -104,7 +111,7 @@ public class Spoon {
                 try {
                     storage.save(tasks.getTasks());
                 } catch (IOException e) {
-                    userInterface.printWritingError(e.getMessage());
+                    userInterface.print(userInterface.showWritingError(e.getMessage()));
                 }
                 break;
             }
@@ -118,13 +125,15 @@ public class Spoon {
                     // On command
                     case ON: {
                         TaskList filteredTasks = tasks.getTasksOn(targetDate);
-                        userInterface.showFilteredTasks(filteredTasks, targetDate, Command.ON);
+                        response = userInterface.showFilteredTasks(filteredTasks,
+                                targetDate, Command.ON);
                         break;
                     }
                     // By command
                     case BY: {
                         TaskList filteredTasks = tasks.getTasksBy(targetDate);
-                        userInterface.showFilteredTasks(filteredTasks, targetDate, Command.BY);
+                        response = userInterface.showFilteredTasks(filteredTasks,
+                                targetDate, Command.BY);
                         break;
                     }
                     // Default: placeholder value, should never happen
@@ -139,7 +148,7 @@ public class Spoon {
             case FIND: {
                 String word = Parser.checkFind(input);
                 TaskList filteredTasks = tasks.findTasks(word);
-                userInterface.showFilteredTasks(filteredTasks, word);
+                response = userInterface.showFilteredTasks(filteredTasks, word);
                 break;
             }
 
@@ -149,12 +158,12 @@ public class Spoon {
                 Task task = Parser.checkAdd(input);
                 // Add command
                 tasks.add(task);
-                userInterface.showAdded(task, tasks.size());
+                response = userInterface.showAdded(task, tasks.size());
 
                 try {
                     storage.save(tasks.getTasks());
                 } catch (IOException e) {
-                    userInterface.printWritingError(e.getMessage());
+                    userInterface.print(userInterface.showWritingError(e.getMessage()));
                 }
                 break;
             }
@@ -165,6 +174,21 @@ public class Spoon {
                 throw new InvalidCommandException();
             }
         }
+        return response;
+    }
+
+    /**
+     * Generates a response for the user's chat message in GUI mode.
+     *
+     * @param input raw text from TextField.
+     * @return formatted reply string from userInterface.
+     */
+    public String getResponse(String input) {
+        try {
+            return executeCommand(input);
+        } catch (SpoonException e) {
+            return userInterface.showError(e.getMessage());
+        }
     }
 
     /**
@@ -173,7 +197,7 @@ public class Spoon {
     public void run() {
 
         // Start message
-        userInterface.printStart();
+        userInterface.print(userInterface.showStart());
 
         // Chat logic
         while (true) {
@@ -185,23 +209,24 @@ public class Spoon {
             } else {
                 try {
                     // Other commands
-                    executeCommand(input);
+                    String response = executeCommand(input);
+                    userInterface.print(response);
                 } catch (SpoonException e) {
-                    userInterface.printError(e.getMessage());
+                    userInterface.print(userInterface.showError(e.getMessage()));
                 }
             }
 
-            userInterface.printDivider();
+            userInterface.print(userInterface.showDivider());
         }
 
         // Save + clean up
         try {
             storage.save(tasks.getTasks());
-            userInterface.printSave();
-            userInterface.printExit();
+            userInterface.print(userInterface.showSave());
+            userInterface.print(userInterface.showExit());
             userInterface.close();
         } catch (IOException e) {
-            userInterface.printWritingError(e.getMessage());
+            userInterface.print(userInterface.showWritingError(e.getMessage()));
         }
 
     }
