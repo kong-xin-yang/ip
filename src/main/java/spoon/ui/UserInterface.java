@@ -162,7 +162,15 @@ public class UserInterface {
     }
 
     // Method for printing to terminal (CLI)
-    public void print(String message) {
-        System.out.print(message);
+    /**
+     * Prints messages to the terminal.
+     *
+     * @param messages an arbitrary number of messages to be printed.
+     *                 can accept zero or more arguments.
+     */
+    public void print(String... messages) {
+        for (String message : messages) {
+            System.out.print(message);
+        }
     }
 }

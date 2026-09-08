@@ -75,17 +75,22 @@ public class TaskList {
     /**
      * Finds all tasks whose description contains the specified word.
      *
-     * @param word the word to search for.
+     * @param words an arbitrary number of words to search for.
+     *              can accept zero or more arguments.
      * @return a TaskList of tasks matching the keyword.
      */
-    public TaskList findTasks(String word) {
-        // TODO: change after merge
+    public TaskList findTasks(String... words) {
         TaskList filteredTasks = new TaskList(new ArrayList<>());
         for (Task task : tasks) {
-            if (task.containsWord(word)) {
-                filteredTasks.add(task);
+            for (String word : words) {
+                if (task.containsWord(word)) {
+                    filteredTasks.add(task);
+                    break;
+                }
             }
         }
         return filteredTasks;
     }
 }
+
+// TODO: Add Varargs implementation for getTasksOn and getTasksBy

@@ -146,9 +146,9 @@ public class Spoon {
 
             // Filter all tasks that contain a word command
             case FIND: {
-                String word = Parser.checkFind(input);
-                TaskList filteredTasks = tasks.findTasks(word);
-                response = userInterface.showFilteredTasks(filteredTasks, word);
+                String[] words = Parser.checkFind(input);
+                TaskList filteredTasks = tasks.findTasks(words);
+                response = userInterface.showFilteredTasks(filteredTasks, String.join(", ", words));
                 break;
             }
 
@@ -222,8 +222,7 @@ public class Spoon {
         // Save + clean up
         try {
             storage.save(tasks.getTasks());
-            userInterface.print(userInterface.showSave());
-            userInterface.print(userInterface.showExit());
+            userInterface.print(userInterface.showSave(), userInterface.showExit());
             userInterface.close();
         } catch (IOException e) {
             userInterface.print(userInterface.showWritingError(e.getMessage()));

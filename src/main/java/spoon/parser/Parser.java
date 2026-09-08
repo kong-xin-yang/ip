@@ -94,12 +94,12 @@ public class Parser {
      * @return word to search for.
      * @throws MissingArgumentException if the keyword argument is missing.
      */
-    public static String checkFind(String input) throws SpoonException {
+    public static String[] checkFind(String input) throws SpoonException {
         String[] inputArray = parseInput(input);
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
-            throw new MissingArgumentException("find", "keyword");
+            throw new MissingArgumentException("find", "keyword(s)");
         }
-        return inputArray[1].trim();
+        return inputArray[1].trim().split("\\s*,\\s*");
     }
 
     /**
