@@ -134,30 +134,12 @@ public class Parser {
 
             // Add deadlines command
             case DEADLINE: {
-                if (inputArray[1].startsWith("/by")) {
-                    throw new MissingArgumentException(commandString, "description");
-                }
-                String[] deadlineArray = inputArray[1].split("\\s+/by\\s+", 2);
-                if (deadlineArray.length < 2 || deadlineArray[1].isBlank()) {
-                    throw new MissingArgumentException(commandString, "deadline (starting with /by)");
-                }
-                return new Deadline(deadlineArray[0], deadlineArray[1]);
+                return parseDeadline(inputArray, commandString);
             }
 
             // Add events command
             case EVENT: {
-                if (inputArray[1].startsWith("/from") || inputArray[1].startsWith("/to")) {
-                    throw new MissingArgumentException(commandString, "description");
-                }
-                String[] eventArray = inputArray[1].split("\\s+/from\\s+", 2);
-                if (eventArray.length < 2 || eventArray[1].isBlank() || eventArray[1].matches("(?i)^/to.*")) {
-                    throw new MissingArgumentException(commandString, "start date (starting with /from)");
-                }
-                String[] eventArgsArray = eventArray[1].split("\\s+/to\\s+", 2);
-                if (eventArgsArray.length < 2 || eventArgsArray[1].isBlank()) {
-                    throw new MissingArgumentException(commandString, "end date (starting with /to)");
-                }
-                return new Event(eventArray[0], eventArgsArray[0], eventArgsArray[1]);
+                return parseEvent(inputArray, commandString);
             }
 
             // Default: placeholder value, should never happen
@@ -168,5 +150,53 @@ public class Parser {
                 throw new FatalErrorException();
             }
         }
+    }
+
+    /**
+     * Checks for exceptions in adding deadlines.
+     *
+     * @param inputArray user input split into command and argument.
+     * @param commandString command converted to string.
+     * @return deadline initialized with command.
+     * @throws MissingArgumentException if argument(s) for deadline initialization are missing.
+     * @throws InvalidFormatException if argument(s) for deadline initialization are in the wrong datetime format.
+     * @throws InvalidArgumentException if arguments for deadline initialization are invalid
+     *     (i.e. end date before start date).
+     */
+    private static Deadline parseDeadline(String[] inputArray, String commandString) throws SpoonException {
+        if (inputArray[1].startsWith("/by")) {
+            throw new MissingArgumentException(commandString, "description");
+        }
+        String[] deadlineArray = inputArray[1].split("\\s+/by\\s+", 2);
+        if (deadlineArray.length < 2 || deadlineArray[1].isBlank()) {
+            throw new MissingArgumentException(commandString, "deadline (starting with /by)");
+        }
+        return new Deadline(deadlineArray[0], deadlineArray[1]);
+    }
+
+    /**
+     * Checks for exceptions in adding events.
+     *
+     * @param inputArray user input split into command and argument.
+     * @param commandString command converted to string.
+     * @return event initialized with command.
+     * @throws MissingArgumentException if argument(s) for event initialization are missing.
+     * @throws InvalidFormatException if argument(s) for event initialization are in the wrong datetime format.
+     * @throws InvalidArgumentException if arguments for event initialization are invalid
+     *     (i.e. end date before start date).
+     */
+    private static Event parseEvent(String[] inputArray, String commandString) throws SpoonException {
+        if (inputArray[1].startsWith("/from") || inputArray[1].startsWith("/to")) {
+            throw new MissingArgumentException(commandString, "description");
+        }
+        String[] eventArray = inputArray[1].split("\\s+/from\\s+", 2);
+        if (eventArray.length < 2 || eventArray[1].isBlank() || eventArray[1].matches("(?i)^/to.*")) {
+            throw new MissingArgumentException(commandString, "start date (starting with /from)");
+        }
+        String[] eventArgsArray = eventArray[1].split("\\s+/to\\s+", 2);
+        if (eventArgsArray.length < 2 || eventArgsArray[1].isBlank()) {
+            throw new MissingArgumentException(commandString, "end date (starting with /to)");
+        }
+        return new Event(eventArray[0], eventArgsArray[0], eventArgsArray[1]);
     }
 }

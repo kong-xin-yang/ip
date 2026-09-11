@@ -56,6 +56,7 @@ public class Spoon {
      * Parses input and converts them to commands + arguments.
      *
      * @param input user input.
+     * @return message to be output.
      * @throws SpoonException if an exception is detected (refer to the different exceptions).
      * @throws InvalidCommandException if a command is invalid.
      */
@@ -79,74 +80,13 @@ public class Spoon {
             // For mark, unmark and delete commands, inputArray[1] would be the index of the task
             // Mark, unmark and delete command
             case MARK, UNMARK, DELETE: {
-                // Check for errors
-                int index = Parser.checkEdit(input, tasks);
-                Task task = tasks.get(index);
-
-                switch (command) {
-                    // Mark command
-                    case MARK: {
-                        task.complete();
-                        response = userInterface.showMarked(task);
-                        break;
-                    }
-                    // Unmark command
-                    case UNMARK: {
-                        task.uncomplete();
-                        response = userInterface.showUnmarked(task);
-                        break;
-                    }
-                    // Delete command
-                    case DELETE: {
-                        tasks.delete(index);
-                        response = userInterface.showDeleted(task, tasks.size());
-                        break;
-                    }
-                    // Default: placeholder value, should never happen
-                    default: {
-                        // checkAdd is only called with commands To-Do, Deadline and Event,
-                        // and therefore should never reach the default case
-                        assert false : "Execution reached default case in checkAdd";
-                        throw new FatalErrorException();
-                    }
-                }
-
-                try {
-                    storage.save(tasks.getTasks());
-                } catch (IOException e) {
-                    userInterface.print(userInterface.showWritingError(e.getMessage()));
-                }
+                response = handleEditCommand(input, command);
                 break;
             }
 
             // Check for tasks on or by a specific date command
             case ON, BY: {
-                // Check for errors
-                LocalDate targetDate = Parser.checkDate(input);
-
-                switch (command) {
-                    // On command
-                    case ON: {
-                        TaskList filteredTasks = tasks.getTasksOn(targetDate);
-                        response = userInterface.showFilteredTasks(filteredTasks,
-                                targetDate, Command.ON);
-                        break;
-                    }
-                    // By command
-                    case BY: {
-                        TaskList filteredTasks = tasks.getTasksBy(targetDate);
-                        response = userInterface.showFilteredTasks(filteredTasks,
-                                targetDate, Command.BY);
-                        break;
-                    }
-                    // Default: placeholder value, should never happen
-                    default: {
-                        // checkAdd is only called with commands To-Do, Deadline and Event,
-                        // and therefore should never reach the default case
-                        assert false : "Execution reached default case in checkAdd";
-                        throw new FatalErrorException();
-                    }
-                }
+                response = handleDateCommand(input, command);
                 break;
             }
 
@@ -160,30 +100,132 @@ public class Spoon {
 
             // Add todos, deadlines or events command
             case TODO, DEADLINE, EVENT: {
-                // Check for errors
-                Task task = Parser.checkAdd(input);
-                // Add command
-                tasks.add(task);
-                response = userInterface.showAdded(task, tasks.size());
-
-                try {
-                    storage.save(tasks.getTasks());
-                } catch (IOException e) {
-                    userInterface.print(userInterface.showWritingError(e.getMessage()));
-                }
+                response = handleAddTask(input);
                 break;
             }
             // Command.UNKNOWN and default: command not recognized
             case UNKNOWN:
                 // Fall through
             default: {
-                // checkAdd is only called with commands To-Do, Deadline and Event,
+                // executeCommand is only called with the commands listed above,
                 // and therefore should never reach the default case
-                assert false : "Execution reached default case in checkAdd";
+                assert false : "Execution reached default case in executeCommand";
                 throw new InvalidCommandException();
             }
         }
         return response;
+    }
+
+    /**
+     * Handles edit commands.
+     *
+     * @param input user input.
+     * @param command command inputted by user.
+     * @return message to be output.
+     * @throws SpoonException if an exception is detected (refer to the different exceptions).
+     */
+    private String handleEditCommand(String input, Command command) throws SpoonException {
+        // Check for errors
+        int index = Parser.checkEdit(input, tasks);
+        Task task = tasks.get(index);
+
+        String response;
+
+        switch (command) {
+            // Mark command
+            case MARK: {
+                task.complete();
+                response = userInterface.showMarked(task);
+                break;
+            }
+            // Unmark command
+            case UNMARK: {
+                task.uncomplete();
+                response = userInterface.showUnmarked(task);
+                break;
+            }
+            // Delete command
+            case DELETE: {
+                tasks.delete(index);
+                response = userInterface.showDeleted(task, tasks.size());
+                break;
+            }
+            // Default: placeholder value, should never happen
+            default: {
+                // handleEditCommit is only called with commands Mark, Unmark and Delete,
+                // and therefore should never reach the default case
+                assert false : "Execution reached default case in handleEditCommand";
+                throw new FatalErrorException();
+            }
+        }
+
+        saveTasks();
+
+        return response;
+    }
+
+    /**
+     * Handles date filtering commands.
+     *
+     * @param input user input.
+     * @param command command inputted by user.
+     * @return message to be output.
+     * @throws SpoonException if an exception is detected (refer to the different exceptions).
+     */
+    private String handleDateCommand(String input, Command command) throws SpoonException {
+        // Check for errors
+        LocalDate targetDate = Parser.checkDate(input);
+
+        switch (command) {
+            // On command
+            case ON: {
+                TaskList filteredTasks = tasks.getTasksOn(targetDate);
+                return userInterface.showFilteredTasks(filteredTasks,
+                        targetDate, Command.ON);
+            }
+            // By command
+            case BY: {
+                TaskList filteredTasks = tasks.getTasksBy(targetDate);
+                return userInterface.showFilteredTasks(filteredTasks,
+                        targetDate, Command.BY);
+            }
+            // Default: placeholder value, should never happen
+            default: {
+                // handleDateCommand is only called with commands On and By,
+                // and therefore should never reach the default case
+                assert false : "Execution reached default case in handleDateCommand";
+                throw new FatalErrorException();
+            }
+        }
+    }
+
+    /**
+     * Handles task adding commands.
+     *
+     * @param input user input.
+     * @return message to be output.
+     * @throws SpoonException if an exception is detected (refer to the different exceptions).
+     */
+    private String handleAddTask(String input) throws SpoonException {
+        // Check for errors
+        Task task = Parser.checkAdd(input);
+        // Add command
+        tasks.add(task);
+        String response = userInterface.showAdded(task, tasks.size());
+
+        saveTasks();
+        return response;
+    }
+
+    /**
+     * Saves tasks to an external file.
+     */
+    private void saveTasks() {
+        try {
+            storage.save(tasks.getTasks());
+        } catch (IOException e) {
+            userInterface.print(userInterface.showWritingError(e.getMessage()));
+        }
     }
 
     /**

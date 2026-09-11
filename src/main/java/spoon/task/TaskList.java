@@ -2,6 +2,7 @@ package spoon.task;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 /**
  * Handles the task list of Spoon.
@@ -48,20 +49,30 @@ public class TaskList {
     }
 
     /**
+     * Filters tasks by the specified condition.
+     *
+     * @param condition condition to filter tasks by.
+     * @return a Tasklist of tasks satisfying the condtion.
+     */
+    private TaskList filterTasks(Predicate<Task> condition) {
+        ArrayList<Task> filtered = new ArrayList<>();
+        for (Task task : tasks) {
+            // condition.test(task) runs whatever true/false check you passed in
+            if (condition.test(task)) {
+                filtered.add(task);
+            }
+        }
+        return new TaskList(filtered);
+    }
+
+    /**
      * Filters tasks to those occurring on the date.
      *
      * @param date target date where tasks are happening.
      * @return a TaskList of tasks happening on the date.
      */
     public TaskList getTasksOn(LocalDate date) {
-        ArrayList<Task> filteredTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.isDueOn(date)) {
-                filteredTasks.add(task);
-            }
-        }
-
-        return new TaskList(filteredTasks);
+        return filterTasks(task -> task.isDueOn(date));
     }
 
     /**
@@ -71,14 +82,7 @@ public class TaskList {
      * @return a TaskList of tasks happening by the date.
      */
     public TaskList getTasksBy(LocalDate date) {
-        ArrayList<Task> filteredTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.isDueBy(date)) {
-                filteredTasks.add(task);
-            }
-        }
-
-        return new TaskList(filteredTasks);
+        return filterTasks(task -> task.isDueBy(date));
     }
 
     /**
