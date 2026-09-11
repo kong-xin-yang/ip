@@ -1,6 +1,7 @@
 package spoon.storage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +33,10 @@ public class Storage {
      * Loads tasks from file.
      *
      * @return list of tasks; returns an empty list if file doesn't exist.
+     * @throws SpoonException if an exception is detected (refer to the different exceptions).
+     * @throws FileNotFoundException if file is not found.
      */
-    public ArrayList<Task> load() throws SpoonException, IOException {
+    public ArrayList<Task> load() throws SpoonException, FileNotFoundException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
         int lineCounter = 0;
@@ -54,52 +57,66 @@ public class Storage {
                     throw new FileCorruptedException(lineCounter);
                 }
 
-                String[] inputArray = line.split("\\s*\\|\\s*");
-
-                // Check for missing or wrong completed status and name
-                if (inputArray.length < 3 || inputArray[2].isBlank()
-                        || !(inputArray[1].equals("0") || inputArray[1].equals("1"))) {
-                    throw new FileCorruptedException(lineCounter);
-                }
-
-                String taskType = inputArray[0];
-                boolean isCompleted = inputArray[1].equals("1");
-                String name = inputArray[2];
-
-                Task task;
-                switch (taskType) {
-                    case "T":
-                        task = new ToDo(name);
-                        break;
-                    case "D":
-                        if (inputArray.length < 4 || inputArray[3].isBlank()) {
-                            throw new FileCorruptedException(lineCounter);
-                        }
-                        task = new Deadline(name, inputArray[3]);
-                        break;
-                    case "E":
-                        if (inputArray.length < 5 || inputArray[3].isBlank()
-                                || inputArray[4].isBlank()) {
-                            throw new FileCorruptedException(lineCounter);
-                        }
-                        task = new Event(name, inputArray[3], inputArray[4]);
-                        break;
-                    default:
-                        throw new FileCorruptedException(lineCounter);
-                }
-
-                // Task should be created before updating its completion status and saving it to storage
-                assert task != null : "Task object is not successfully initialized"
-                        + "before status update and storage write";
-
-                if (isCompleted) {
-                    task.complete();
-                }
+                Task task = parseTask(line, lineCounter);
                 tasks.add(task);
             }
         }
 
         return tasks;
+    }
+
+    /**
+     * Converts a line read from file to the corresponding task.
+     *
+     * @param line line read from file.
+     * @param lineCounter number of lines read so far.
+     * @return task read from line.
+     * @throws SpoonException if an exception is detected (refer to the different exceptions).
+     */
+    private Task parseTask(String line, int lineCounter) throws SpoonException {
+        String[] inputArray = line.split("\\s*\\|\\s*");
+
+        // Check for missing or wrong completed status and name
+        if (inputArray.length < 3 || inputArray[2].isBlank()
+                || !(inputArray[1].equals("0") || inputArray[1].equals("1"))) {
+            throw new FileCorruptedException(lineCounter);
+        }
+
+        String taskType = inputArray[0];
+        boolean isCompleted = inputArray[1].equals("1");
+        String name = inputArray[2];
+
+        Task task;
+        switch (taskType) {
+            case "T":
+                task = new ToDo(name);
+                break;
+            case "D":
+                if (inputArray.length < 4 || inputArray[3].isBlank()) {
+                    throw new FileCorruptedException(lineCounter);
+                }
+                task = new Deadline(name, inputArray[3]);
+                break;
+            case "E":
+                if (inputArray.length < 5 || inputArray[3].isBlank()
+                        || inputArray[4].isBlank()) {
+                    throw new FileCorruptedException(lineCounter);
+                }
+                task = new Event(name, inputArray[3], inputArray[4]);
+                break;
+            default:
+                throw new FileCorruptedException(lineCounter);
+        }
+
+        // Task should be created before updating its completion status and saving it to storage
+        assert task != null : "Task object is not successfully initialized"
+                + "before status update and storage write";
+
+        if (isCompleted) {
+            task.complete();
+        }
+
+        return task;
     }
 
     /**
