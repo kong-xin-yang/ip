@@ -2,6 +2,8 @@ package spoon.ui;
 
 import java.time.LocalDate;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import spoon.command.Command;
 import spoon.task.Task;
@@ -116,16 +118,9 @@ public class UserInterface {
      * @return formatted string of all filtered tasks.
      */
     public String showFilteredTasks(TaskList tasks, LocalDate date, Command connective) {
-        if (tasks.size() == 0) {
-            return LIST_EMPTY + System.lineSeparator();
-        } else {
-            String message = String.format(TASK_FILTER, connective.toString().toLowerCase(),
-                    DateFormat.toDisplay(date)) + System.lineSeparator();
-            for (int i = 0; i < tasks.size(); i++) {
-                message += (i + 1) + ". " + tasks.get(i) + System.lineSeparator();
-            }
-            return message;
-        }
+        String header = String.format(TASK_FILTER, connective.toString().toLowerCase(),
+                DateFormat.toDisplay(date)) + System.lineSeparator();
+        return formatTaskList(tasks, header);
     }
 
     /**
@@ -135,20 +130,30 @@ public class UserInterface {
      * @return formatted string of all filtered tasks.
      */
     public String showFilteredTasks(TaskList tasks, String word) {
+        String header = String.format(TASK_FILTER, "contains", word)
+                + System.lineSeparator();
+        return formatTaskList(tasks, header);
+    }
+
+    /**
+     * Formats the tasks into an indexed list.
+     *
+     * @param tasks list of matching tasks.
+     * @param header start of the task list (after it has been converted to string).
+     * @return formatted string of all filtered tasks.
+     */
+    private String formatTaskList(TaskList tasks, String header) {
         if (tasks.size() == 0) {
             return LIST_EMPTY + System.lineSeparator();
         } else {
-            String message = String.format(TASK_FILTER, "contains", word)
-                    + System.lineSeparator();
-            for (int i = 0; i < tasks.size(); i++) {
-                message += (i + 1) + ". " + tasks.get(i) + System.lineSeparator();
-            }
-            return message;
+            String formattedTasks = IntStream.range(0, tasks.size())
+                    .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
+                    .collect(Collectors.joining(System.lineSeparator()));
+            return header + formattedTasks + System.lineSeparator();
         }
     }
 
     // Methods for closing Spoon
-
     public String showSave() {
         return SAVE_SUCCESS + System.lineSeparator();
     }

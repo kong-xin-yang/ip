@@ -85,6 +85,8 @@ public class TaskList {
         return filterTasks(task -> task.isDueBy(date));
     }
 
+    // TODO: change the predicate method to streams and use it on find tasks too
+
     /**
      * Finds all tasks whose description contains the specified word.
      *
