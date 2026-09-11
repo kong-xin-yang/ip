@@ -159,7 +159,7 @@ class DateFormatTest {
             LocalDateTime taskDate = LocalDateTime.of(1, 1, 10, 1, 1);
 
             assertTrue(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 10)));
-            assertTrue(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 21)))
+            assertTrue(DateFormat.isDueBy(taskDate, LocalDate.of(1, 1, 21)));
         }
 
         @Test

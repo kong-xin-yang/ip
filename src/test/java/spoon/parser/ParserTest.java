@@ -168,8 +168,8 @@ public class ParserTest {
         }
 
         @Test
-        void checkAdd_invalidCommand_throwsFatalErrorException() {
-            assertThrows(FatalErrorException.class, () -> Parser.checkAdd("list tasks"));
+        void checkAdd_invalidCommand_throwsAssertionError() {
+            assertThrows(AssertionError.class, () -> Parser.checkAdd("list tasks"));
         }
     }
 }
