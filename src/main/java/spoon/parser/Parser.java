@@ -23,6 +23,8 @@ public class Parser {
      * @return inputArray parsed from user input.
      */
     public static String[] parseInput(String input) {
+        // User input should at worst be an empty string, never null
+        assert input != null : "String 'input' is null";
         return input.split("\\s+", 2);
     }
 
@@ -99,7 +101,10 @@ public class Parser {
         if (inputArray.length < 2 || inputArray[1].isBlank()) {
             throw new MissingArgumentException("find", "keyword(s)");
         }
-        return inputArray[1].trim().split("\\s*,\\s*");
+        String[] words = inputArray[1].trim().split("\\s*,\\s*");
+        // Words should at worst be an array with a empty string as an element, never of length 0
+        assert words.length > 0 : "Array 'words' does not have at least one valid search token";
+        return words;
     }
 
     /**
@@ -139,6 +144,9 @@ public class Parser {
 
             // Default: placeholder value, should never happen
             default: {
+                // checkAdd is only called with commands To-Do, Deadline and Event,
+                // and therefore should never reach the default case
+                assert false : "Execution reached default case in checkAdd";
                 throw new FatalErrorException();
             }
         }

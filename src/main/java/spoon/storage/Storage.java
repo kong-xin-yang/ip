@@ -22,6 +22,8 @@ public class Storage {
 
     // Constructor
     public Storage(String filePath) {
+        // File path should never be null or blank, else no such place to load from and write to
+        assert filePath != null && !filePath.isBlank() : "Storage filePath is null or blank";
         this.filePath = filePath;
     }
 
@@ -105,6 +107,10 @@ public class Storage {
                 throw new FileCorruptedException(lineCounter);
         }
 
+        // Task should be created before updating its completion status and saving it to storage
+        assert task != null : "Task object is not successfully initialized"
+                + "before status update and storage write";
+
         if (isCompleted) {
             task.complete();
         }
@@ -118,6 +124,9 @@ public class Storage {
      * @param tasks current list of tasks.
      */
     public void save(ArrayList<Task> tasks) throws IOException {
+        // Task list should never be null
+        assert tasks != null : "A null list of tasks is being written to storage";
+
         File file = new File(filePath);
         File parentDir = file.getParentFile();
 
@@ -128,6 +137,8 @@ public class Storage {
 
         try (FileWriter fw = new FileWriter(file)) {
             for (Task task : tasks) {
+                // Task should never be null
+                assert task != null : "A null task is being written to storage";
                 fw.write(task.format() + System.lineSeparator());
             }
         }

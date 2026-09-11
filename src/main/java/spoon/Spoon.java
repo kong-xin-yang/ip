@@ -107,6 +107,9 @@ public class Spoon {
             case UNKNOWN:
                 // Fall through
             default: {
+                // executeCommand is only called with the commands listed above,
+                // and therefore should never reach the default case
+                assert false : "Execution reached default case in executeCommand";
                 throw new InvalidCommandException();
             }
         }
@@ -149,6 +152,9 @@ public class Spoon {
             }
             // Default: placeholder value, should never happen
             default: {
+                // handleEditCommit is only called with commands Mark, Unmark and Delete,
+                // and therefore should never reach the default case
+                assert false : "Execution reached default case in handleEditCommand";
                 throw new FatalErrorException();
             }
         }
@@ -185,6 +191,9 @@ public class Spoon {
             }
             // Default: placeholder value, should never happen
             default: {
+                // handleDateCommand is only called with commands On and By,
+                // and therefore should never reach the default case
+                assert false : "Execution reached default case in handleDateCommand";
                 throw new FatalErrorException();
             }
         }
