@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import spoon.exception.FileCorruptedException;
 import spoon.exception.SpoonException;
@@ -110,9 +111,10 @@ public class Storage {
         }
 
         try (FileWriter fw = new FileWriter(file)) {
-            for (Task task : tasks) {
-                fw.write(task.format() + System.lineSeparator());
-            }
+            String task = tasks.stream()
+                    .map(Task::format)
+                    .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+            fw.write(task);
         }
     }
 }

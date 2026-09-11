@@ -72,6 +72,8 @@ public class TaskList {
         return new TaskList(filteredTasks);
     }
 
+    // TODO: change the predicate method to streams and use it on find tasks too
+
     /**
      * Finds all tasks whose description contains the specified word.
      *
