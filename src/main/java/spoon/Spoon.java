@@ -150,6 +150,11 @@ public class Spoon {
                 response = userInterface.showDeleted(task, tasks.size());
                 break;
             }
+            // Help command
+            case HELP: {
+                response = userInterface.showHelp();
+                break;
+            }
             // Default: placeholder value, should never happen
             default: {
                 // handleEditCommit is only called with commands Mark, Unmark and Delete,

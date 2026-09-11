@@ -49,6 +49,7 @@ public class ParserTest {
             assertEquals(Command.MARK, Parser.parseCommand("mark 1"));
             assertEquals(Command.UNMARK, Parser.parseCommand("unmark 1"));
             assertEquals(Command.DELETE, Parser.parseCommand("delete 1"));
+            assertEquals(Command.HELP, Parser.parseCommand("help"));
             assertEquals(Command.ON, Parser.parseCommand("on 01/01/0001"));
             assertEquals(Command.BY, Parser.parseCommand("by 01/01/0001"));
             assertEquals(Command.FIND, Parser.parseCommand("find word"));
