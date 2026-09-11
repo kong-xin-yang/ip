@@ -17,14 +17,14 @@ public class UserInterface {
     private static final String BANNER = "~~~ Welcome to Spoon ~~~";
     private static final String INTRODUCTION = "Hello, I'm Spoon, your friendly neighbourhood chatbot!"
             + System.lineSeparator() + "What do you wanna talk about?";
-    private static final String LOAD_SUCCESSFUL = "Tasks loaded! Time to get to work!" + System.lineSeparator();
-    private static final String LOADING_ERROR = "Error reading storage file: %s" + System.lineSeparator();
-    private static final String WRITING_ERROR = "Error writing to storage file: %s" + System.lineSeparator();
+    private static final String LOAD_SUCCESSFUL = "Tasks loaded! Time to get to work!";
+    private static final String LOADING_ERROR = "Error reading storage file: %s";
+    private static final String WRITING_ERROR = "Error writing to storage file: %s";
     private static final String LIST_EMPTY = "Nothing here yet...";
     private static final String TASK_ADDED = "I've added this task to the list! :)";
-    private static final String LIST_LENGTH = "Now, you have %d task(s)! \uD83D\uDC4D" + System.lineSeparator();
+    private static final String LIST_LENGTH = "Now, you have %d task(s)! \uD83D\uDC4D";
     private static final String LIST_INTRODUCTION = "Here's your list!";
-    private static final String TASK_FILTER = "Filter criteria: %s %s" + System.lineSeparator();
+    private static final String TASK_FILTER = "Filter criteria: %s %s";
     private static final String MARK_COMPLETE = "YAYYYY, task complete!";
     private static final String MARK_INCOMPLETE = "Oops, there's more work to be done!";
     private static final String TASK_DELETED = "Okay, task deleted!";
