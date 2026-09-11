@@ -104,6 +104,9 @@ public class Spoon {
                     }
                     // Default: placeholder value, should never happen
                     default: {
+                        // checkAdd is only called with commands To-Do, Deadline and Event,
+                        // and therefore should never reach the default case
+                        assert false : "Execution reached default case in checkAdd";
                         throw new FatalErrorException();
                     }
                 }
@@ -138,6 +141,9 @@ public class Spoon {
                     }
                     // Default: placeholder value, should never happen
                     default: {
+                        // checkAdd is only called with commands To-Do, Deadline and Event,
+                        // and therefore should never reach the default case
+                        assert false : "Execution reached default case in checkAdd";
                         throw new FatalErrorException();
                     }
                 }
@@ -171,6 +177,9 @@ public class Spoon {
             case UNKNOWN:
                 // Fall through
             default: {
+                // checkAdd is only called with commands To-Do, Deadline and Event,
+                // and therefore should never reach the default case
+                assert false : "Execution reached default case in checkAdd";
                 throw new InvalidCommandException();
             }
         }

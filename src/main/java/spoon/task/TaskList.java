@@ -19,14 +19,23 @@ public class TaskList {
     }
 
     public void add(Task task) {
+        // Task should never be null
+        assert task != null : "A null task is added to TaskList";
         tasks.add(task);
     }
 
     public void delete(int index) {
+        // Index should be within the bounds of the list
+        assert index >= 0 && index < tasks.size() : "Index to delete is out of bounds";
+        int initialSize = this.size();
         tasks.remove(index);
+        // Size of TaskList should decrease by 1 after deletion
+        assert tasks.size() == initialSize - 1 : "TaskList size did not decrease by 1 after deletion";
     }
 
     public Task get(int index) {
+        // Index should be within the bounds of the list
+        assert index >= 0 && index < tasks.size() : "Index to access is out of bounds";
         return tasks.get(index);
     }
 
