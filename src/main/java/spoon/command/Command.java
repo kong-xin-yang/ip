@@ -1,7 +1,7 @@
 package spoon.command;
 
 /**
- * Represents the set of valid comments recognized by Spoon.
+ * Represents the set of valid commands recognized by Spoon.
  */
 public enum Command {
     BYE,
@@ -21,7 +21,7 @@ public enum Command {
      * Converts an input to its corresponding command.
      *
      * @param input the user input.
-     * @return the corresponding command.
+     * @return the corresponding command, or UNKNOWN if command is null, empty or invalid.
      */
     public static Command fromString(String input) {
         if (input == null || input.isBlank()) {
