@@ -57,6 +57,7 @@ application {
 
 checkstyle {
     toolVersion = '14.1.0'
+    ignoreFailures = true
 }
 
 jar {

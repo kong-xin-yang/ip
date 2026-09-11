@@ -56,7 +56,8 @@ public class DateFormat {
      */
     public static String toDisplay(ParseResult parsedDateTime) {
         if (parsedDateTime.includeTime()) {
-            return parsedDateTime.dateTime().format(DATE_TIME_DISPLAY);
+            return parsedDateTime.dateTime().format(DATE_TIME_DISPLAY)
+                    .replace("AM", "am").replace("PM", "pm");
         }
         return parsedDateTime.dateTime().format(DATE_DISPLAY);
     }

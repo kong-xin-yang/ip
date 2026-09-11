@@ -22,7 +22,8 @@ public class Event extends Task {
         if (this.startDate.dateTime().isAfter(this.endDate.dateTime())) {
             throw new InvalidArgumentException("Start time must be before end time!");
         }
-        assert this.startDate.dateTime().isAfter(this.endDate.dateTime()) : "Start time should never be after end time";
+        assert !(this.startDate.dateTime().isAfter(this.endDate.dateTime()))
+                : "Start time should never be after end time";
     }
 
     // Methods
