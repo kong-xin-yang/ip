@@ -8,11 +8,17 @@
     -fx-padding: 6px;
     -fx-border-insets: 0px 7px 0px 7px;
     -fx-background-insets: 0px 7px 0px 7px;
+    -fx-font-family: "Chalkboard SE", "Chalkboard", "Comic Neue", sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
 }
 
 .reply-label {
     -fx-background-radius: 1em 1em 1em 0;
     -fx-border-radius: 1em 1em 1em 0;
+    -fx-font-family: "Chalkboard SE", "Chalkboard", "Comic Neue", sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
 }
 
 #displayPicture {
