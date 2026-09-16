@@ -58,6 +58,12 @@ public class Storage {
                 }
 
                 Task task = parseTask(line, lineCounter);
+
+                // Check for duplicate tasks
+                if (tasks.contains(task)) {
+                    throw new FileCorruptedException(lineCounter);
+                }
+
                 tasks.add(task);
             }
         }

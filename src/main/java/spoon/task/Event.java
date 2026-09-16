@@ -50,4 +50,21 @@ public class Event extends Task {
                 + " (from: " + DateFormat.toDisplay(startDate)
                 + " to: " + DateFormat.toDisplay(endDate) + ")";
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Event otherEvent)) {
+            return false;
+        }
+        return super.equals(object) && java.util.Objects.equals(this.startDate, otherEvent.startDate)
+                && java.util.Objects.equals(this.endDate, otherEvent.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), this.startDate, this.endDate);
+    }
 }

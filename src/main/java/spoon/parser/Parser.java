@@ -21,11 +21,16 @@ public class Parser {
      *
      * @param input user input.
      * @return inputArray parsed from user input.
+     * @throws InvalidArgumentException if the special character '|' is used
+     *              (delimiter used in file storage).
      */
-    public static String[] parseInput(String input) {
+    public static String[] parseInput(String input) throws InvalidArgumentException {
         // User input should at worst be an empty string, never null
         assert input != null : "String 'input' is null";
-        return input.split("\\s+", 2);
+        if (input.contains("|")) {
+            throw new InvalidArgumentException("Task descriptions cannot contain the '|' character.");
+        }
+        return input.trim().split("\\s+", 2);
     }
 
     /**
@@ -34,7 +39,7 @@ public class Parser {
      * @param input user input.
      * @return command parsed from user input.
      */
-    public static Command parseCommand(String input) {
+    public static Command parseCommand(String input) throws InvalidArgumentException {
         return Command.fromString(parseInput(input)[0]);
     }
 
@@ -77,6 +82,8 @@ public class Parser {
      * @param input user input.
      * @return date for task filtering.
      * @throws MissingArgumentException if argument for task filtering is missing.
+     * @throws InvalidArgumentException if the special character '|' is used
+     *              (delimiter used in file storage).
      */
     public static LocalDate checkDate(String input) throws SpoonException {
         String[] inputArray = parseInput(input);
@@ -159,6 +166,7 @@ public class Parser {
      * @param commandString command converted to string.
      * @return deadline initialized with command.
      * @throws MissingArgumentException if argument(s) for deadline initialization are missing.
+     * @throws DuplicateTaskException if there are duplicated arguments for deadline initialization.
      * @throws InvalidFormatException if argument(s) for deadline initialization are in the wrong datetime format.
      * @throws InvalidArgumentException if arguments for deadline initialization are invalid
      *     (i.e. end date before start date).
@@ -167,9 +175,11 @@ public class Parser {
         if (inputArray[1].startsWith("/by")) {
             throw new MissingArgumentException(commandString, "description");
         }
-        String[] deadlineArray = inputArray[1].split("\\s+/by\\s+", 2);
+        String[] deadlineArray = inputArray[1].split("\\s+/by\\s+");
         if (deadlineArray.length < 2 || deadlineArray[1].isBlank()) {
             throw new MissingArgumentException(commandString, "deadline (starting with /by)");
+        } else if (deadlineArray.length > 2) {
+            throw new DuplicateArgumentException("by");
         }
         return new Deadline(deadlineArray[0], deadlineArray[1]);
     }
@@ -181,6 +191,7 @@ public class Parser {
      * @param commandString command converted to string.
      * @return event initialized with command.
      * @throws MissingArgumentException if argument(s) for event initialization are missing.
+     * @throws DuplicateTaskException if there are duplicated arguments for deadline initialization.
      * @throws InvalidFormatException if argument(s) for event initialization are in the wrong datetime format.
      * @throws InvalidArgumentException if arguments for event initialization are invalid
      *     (i.e. end date before start date).
@@ -189,13 +200,17 @@ public class Parser {
         if (inputArray[1].startsWith("/from") || inputArray[1].startsWith("/to")) {
             throw new MissingArgumentException(commandString, "description");
         }
-        String[] eventArray = inputArray[1].split("\\s+/from\\s+", 2);
+        String[] eventArray = inputArray[1].split("\\s+/from\\s+");
         if (eventArray.length < 2 || eventArray[1].isBlank() || eventArray[1].matches("(?i)^/to.*")) {
             throw new MissingArgumentException(commandString, "start date (starting with /from)");
+        } else if (eventArray.length > 2) {
+            throw new DuplicateArgumentException("from");
         }
-        String[] eventArgsArray = eventArray[1].split("\\s+/to\\s+", 2);
+        String[] eventArgsArray = eventArray[1].split("\\s+/to\\s+");
         if (eventArgsArray.length < 2 || eventArgsArray[1].isBlank()) {
             throw new MissingArgumentException(commandString, "end date (starting with /to)");
+        } else if (eventArgsArray.length > 2) {
+            throw new DuplicateArgumentException("to");
         }
         return new Event(eventArray[0], eventArgsArray[0], eventArgsArray[1]);
     }

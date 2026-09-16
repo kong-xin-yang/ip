@@ -25,17 +25,23 @@ public class ParserTest {
     class ParseInputTests {
 
         @Test
-        public void parseInput_singleWord_returnsSingleElementArray() {
+        public void parseInput_singleWord_returnsSingleElementArray() throws InvalidArgumentException {
             String[] test = Parser.parseInput("word");
             assertArrayEquals(new String[]{"word"}, test);
         }
 
         @Test
-        public void parseInput_multipleWords_returnsTwoElementArray() {
+        public void parseInput_multipleWords_returnsTwoElementArray() throws InvalidArgumentException {
             String[] test1 = Parser.parseInput("two words");
             String[] test2 = Parser.parseInput("more than two words");
             assertArrayEquals(new String[]{"two", "words"}, test1);
             assertArrayEquals(new String[]{"more", "than two words"}, test2);
+        }
+
+        @Test
+        public void parseInput_specialCharacter_throwsInvalidArgumentException() {
+            assertThrows(InvalidArgumentException.class, () -> Parser.parseInput("|"));
+            assertThrows(InvalidArgumentException.class, () -> Parser.parseInput("two|words"));
         }
     }
 
@@ -43,7 +49,7 @@ public class ParserTest {
     class ParseCommandTests {
 
         @Test
-        public void parseCommand_validInput_returnsCorrectEnum() {
+        public void parseCommand_validInput_returnsCorrectEnum() throws InvalidArgumentException {
             assertEquals(Command.BYE, Parser.parseCommand("bye"));
             assertEquals(Command.LIST, Parser.parseCommand("list"));
             assertEquals(Command.MARK, Parser.parseCommand("mark 1"));
@@ -64,7 +70,7 @@ public class ParserTest {
         private TaskList testTaskList;
 
         @BeforeEach
-        void setUp() {
+        void setUp() throws DuplicateTaskException {
             testTaskList = new TaskList();
             testTaskList.add(new ToDo("Task 1"));
             testTaskList.add(new ToDo("Task 2"));

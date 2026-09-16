@@ -39,4 +39,20 @@ public class Deadline extends Task {
         return "[D]" + super.toString()
                 + " (by: " + DateFormat.toDisplay(deadline) + ")";
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Deadline otherDeadline)) {
+            return false;
+        }
+        return super.equals(object) && java.util.Objects.equals(this.deadline, otherDeadline.deadline);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), this.deadline);
+    }
 }

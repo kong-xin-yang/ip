@@ -71,4 +71,20 @@ public abstract class Task {
         String status = this.isCompleted ? COMPLETED_SYMBOL : UNCOMPLETED_SYMBOL;
         return status + " " + this.name;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Task otherTask)) {
+            return false;
+        }
+        return this.name.equalsIgnoreCase(otherTask.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.toLowerCase().hashCode();
+    }
 }

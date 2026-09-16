@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
+import spoon.exception.DuplicateTaskException;
+
 /**
  * Handles the task list of Spoon.
  */
@@ -19,9 +21,18 @@ public class TaskList {
         this.tasks = tasks != null ? tasks : new ArrayList<>();
     }
 
-    public void add(Task task) {
+    /**
+     * Adds a task to the list if it is not already present.
+     *
+     * @param task task to be added.
+     * @throws DuplicateTaskException if an identical task is already in the list.
+     */
+    public void add(Task task) throws DuplicateTaskException {
         // Task should never be null
         assert task != null : "A null task is added to TaskList";
+        if (tasks.contains(task)) {
+            throw new DuplicateTaskException();
+        }
         tasks.add(task);
     }
 
@@ -93,7 +104,7 @@ public class TaskList {
      * @return a TaskList of tasks matching the keyword.
      */
     public TaskList findTasks(String... words) {
-        TaskList filteredTasks = new TaskList(new ArrayList<>());
+        ArrayList<Task> filteredTasks = new ArrayList<>();
         for (Task task : tasks) {
             for (String word : words) {
                 if (task.containsWord(word)) {
@@ -102,7 +113,7 @@ public class TaskList {
                 }
             }
         }
-        return filteredTasks;
+        return new TaskList(filteredTasks);
     }
 }
 

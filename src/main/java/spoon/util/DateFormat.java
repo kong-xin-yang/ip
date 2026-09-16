@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import spoon.exception.InvalidFormatException;
 
@@ -17,12 +18,16 @@ public class DateFormat {
     public record ParseResult(LocalDateTime dateTime, boolean includeTime) {}
 
     // Date input format handlers
-    private static final DateTimeFormatter DATE_INPUT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter DATE_TIME_INPUT = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+    private static final DateTimeFormatter DATE_INPUT = DateTimeFormatter.ofPattern("dd/MM/uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter DATE_TIME_INPUT = DateTimeFormatter.ofPattern("dd/MM/uuuu HHmm")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     // Date output format handlers
-    private static final DateTimeFormatter DATE_DISPLAY = DateTimeFormatter.ofPattern("MMM dd yyyy");
-    private static final DateTimeFormatter DATE_TIME_DISPLAY = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+    private static final DateTimeFormatter DATE_DISPLAY = DateTimeFormatter.ofPattern("MMM dd uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter DATE_TIME_DISPLAY = DateTimeFormatter.ofPattern("MMM dd uuuu, h:mma")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     /**
      * Parses a string into a LocalDate or LocalDateTime.

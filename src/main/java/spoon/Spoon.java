@@ -261,17 +261,16 @@ public class Spoon {
         while (true) {
             // Get input and split it into commands, index and options
             String input = userInterface.readCommand();
-            // Exit command
-            if (Parser.parseCommand(input) == Command.BYE) {
-                break;
-            } else {
-                try {
-                    // Other commands
-                    String response = executeCommand(input);
-                    userInterface.print(response);
-                } catch (SpoonException e) {
-                    userInterface.print(userInterface.showError(e.getMessage()));
+            try {
+                // Exit command
+                if (Parser.parseCommand(input) == Command.BYE) {
+                    break;
                 }
+                // Other commands
+                String response = executeCommand(input);
+                userInterface.print(response);
+            } catch (SpoonException e) {
+                userInterface.print(userInterface.showError(e.getMessage()));
             }
 
             userInterface.print(userInterface.showDivider());
