@@ -34,18 +34,18 @@ public class UserInterface {
     private static final String EXIT = "Goodbye! Let's speak again soon!";
 
     private static final String HELP = "Here are the available commands:" + System.lineSeparator()
-            + "  • todo <desc>                              - Add a todo task" + System.lineSeparator()
-            + "  • deadline <desc> /by <dd/MM/yyyy [HHmm]>  - Add a deadline" + System.lineSeparator()
-            + "  • event <desc> /from <..> /to <..>         - Add an event" + System.lineSeparator()
-            + "  • list                                     - List all tasks" + System.lineSeparator()
-            + "  • mark <index>                             - Mark task as done" + System.lineSeparator()
-            + "  • unmark <index>                           - Mark task as not done" + System.lineSeparator()
-            + "  • delete <index>                           - Delete task" + System.lineSeparator()
-            + "  • find <keyword[, ...]>                    - Search tasks by keywords" + System.lineSeparator()
-            + "  • on <dd/MM/yyyy>                          - List tasks due/occurring on date" + System.lineSeparator()
-            + "  • by <dd/MM/yyyy>                          - List tasks due before date" + System.lineSeparator()
-            + "  • help                                     - Show this help guide" + System.lineSeparator()
-            + "  • bye                                      - Exit Spoon";
+            + "  • todo <desc>    - Add a todo task" + System.lineSeparator()
+            + "  • deadline <desc> /by <dd/MM/yyyy [HHmm]>    - Add a deadline" + System.lineSeparator()
+            + "  • event <desc> /from <..> /to <..>    - Add an event" + System.lineSeparator()
+            + "  • list    - List all tasks" + System.lineSeparator()
+            + "  • mark <index>    - Mark task as done" + System.lineSeparator()
+            + "  • unmark <index>     - Mark task as not done" + System.lineSeparator()
+            + "  • delete <index>    - Delete task" + System.lineSeparator()
+            + "  • find <keyword[, ...]>    - Search tasks by keywords" + System.lineSeparator()
+            + "  • on <dd/MM/yyyy>    - List tasks due/occurring on date" + System.lineSeparator()
+            + "  • by <dd/MM/yyyy>    - List tasks due before date" + System.lineSeparator()
+            + "  • help    - Show this help guide" + System.lineSeparator()
+            + "  • bye    - Exit Spoon";
 
     private final Scanner scanner;
 

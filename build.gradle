@@ -71,7 +71,18 @@ shadowJar {
     archiveFileName = 'spoon.jar'
 }
 
+// Command Line Interface
 run {
+    mainClass = 'spoon.Spoon'
     standardInput = System.in
     enableAssertions = true
+}
+
+// Graphical User Interface
+tasks.register('runGUI', JavaExec) {
+    group = 'application'
+    description = 'Runs the JavaFX GUI'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'spoon.Launcher'    // GUI launcher entry point
+    enableAssertions = false
 }

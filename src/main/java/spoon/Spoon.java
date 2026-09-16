@@ -103,6 +103,13 @@ public class Spoon {
                 response = handleAddTask(input);
                 break;
             }
+
+            // Help command
+            case HELP: {
+                response = userInterface.showHelp();
+                break;
+            }
+
             // Command.UNKNOWN and default: command not recognized
             case UNKNOWN:
                 // Fall through
@@ -148,11 +155,6 @@ public class Spoon {
             case DELETE: {
                 tasks.delete(index);
                 response = userInterface.showDeleted(task, tasks.size());
-                break;
-            }
-            // Help command
-            case HELP: {
-                response = userInterface.showHelp();
                 break;
             }
             // Default: placeholder value, should never happen
