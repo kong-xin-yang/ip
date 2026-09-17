@@ -69,7 +69,7 @@ public abstract class Task {
     @Override
     public String toString() {
         String status = this.isCompleted ? COMPLETED_SYMBOL : UNCOMPLETED_SYMBOL;
-        return status + " " + this.name;
+        return status + this.name;
     }
 
     @Override

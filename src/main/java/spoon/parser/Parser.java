@@ -166,7 +166,7 @@ public class Parser {
      * @param commandString command converted to string.
      * @return deadline initialized with command.
      * @throws MissingArgumentException if argument(s) for deadline initialization are missing.
-     * @throws DuplicateTaskException if there are duplicated arguments for deadline initialization.
+     * @throws DuplicateArgumentException if there are duplicated arguments for deadline initialization.
      * @throws InvalidFormatException if argument(s) for deadline initialization are in the wrong datetime format.
      * @throws InvalidArgumentException if arguments for deadline initialization are invalid
      *     (i.e. end date before start date).
@@ -191,7 +191,7 @@ public class Parser {
      * @param commandString command converted to string.
      * @return event initialized with command.
      * @throws MissingArgumentException if argument(s) for event initialization are missing.
-     * @throws DuplicateTaskException if there are duplicated arguments for deadline initialization.
+     * @throws DuplicateArgumentException if there are duplicated arguments for event initialization.
      * @throws InvalidFormatException if argument(s) for event initialization are in the wrong datetime format.
      * @throws InvalidArgumentException if arguments for event initialization are invalid
      *     (i.e. end date before start date).

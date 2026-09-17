@@ -112,12 +112,12 @@ public class Spoon {
 
             // Command.UNKNOWN and default: command not recognized
             case UNKNOWN:
-                // Fall through
+                throw new InvalidCommandException();
             default: {
                 // executeCommand is only called with the commands listed above,
                 // and therefore should never reach the default case
                 assert false : "Execution reached default case in executeCommand";
-                throw new InvalidCommandException();
+                throw new FatalErrorException();
             }
         }
         return response;
@@ -292,5 +292,3 @@ public class Spoon {
         new Spoon().run();
     }
 }
-
-// TODO: Add JUnit tests for the methods in all classes (so far, only Parser + DateFormat has been done)

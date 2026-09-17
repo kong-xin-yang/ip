@@ -21,7 +21,7 @@ class DateFormatTest {
     class ParseTests {
 
         @Test
-        void parse_dateOnly_returnsMidnightWithIncludeTimeFalse() throws InvalidFormatException {
+        void parse_dateOnly_returnsMidnightWithIncludeTimeFalse() throws Exception {
             DateFormat.ParseResult result = DateFormat.parse("01/01/0001");
 
             assertEquals(LocalDateTime.of(1, 1, 1, 0, 0), result.dateTime());
@@ -29,7 +29,7 @@ class DateFormatTest {
         }
 
         @Test
-        void parse_dateTime_returnsExactTimeWithIncludeTimeTrue() throws InvalidFormatException {
+        void parse_dateTime_returnsExactTimeWithIncludeTimeTrue() throws Exception {
             DateFormat.ParseResult result = DateFormat.parse("01/01/0001 0101");
 
             assertEquals(LocalDateTime.of(1, 1, 1, 1, 1), result.dateTime());
@@ -37,25 +37,38 @@ class DateFormatTest {
         }
 
         @Test
-        void parse_withLeadingAndTrailingWhitespace_parsesSuccessfully() throws InvalidFormatException {
+        void parse_withLeadingAndTrailingWhitespace_parsesSuccessfully() throws Exception {
             DateFormat.ParseResult result = DateFormat.parse("   01/01/0001 0101   ");
 
             assertEquals(LocalDateTime.of(1, 1, 1, 1, 1), result.dateTime());
             assertTrue(result.includeTime());
         }
 
+        @Test
+        void parse_midnightBoundary_parsesSuccessfully() throws Exception {
+            DateFormat.ParseResult result = DateFormat.parse("01/01/0001 0000");
+
+            assertEquals(LocalDateTime.of(1, 1, 1, 0, 0), result.dateTime());
+            assertTrue(result.includeTime());
+        }
+
         @ParameterizedTest
         @ValueSource(strings = {
-                "0001-01-01",               // ISO format (yyyy-MM-dd)
-                "01-01-0001",               // Hyphenated
-                "01/01/01",                 // 2-digit year
-                "Jan 01 0001",              // Output format
-                "Jan 01 0001, 1:01pm",      // Output format with
-                "01/12/0001 1:01am",        // Invalid time syntax
-                "32/01/0001",               // Out-of-bounds day
-                "01/13/0001",               // Out-of-bounds month
-                "invalid-date",             // Text input
-                ""                          // Empty string
+                "0001-01-01",          // ISO format (yyyy-MM-dd)
+                "01-01-0001",          // Hyphenated delimiter
+                "01/01/01",            // 2-digit year
+                "Jan 01 0001",         // Display format
+                "Jan 01 0001, 1:01pm", // Display format with time
+                "01/12/0001 1:01am",   // 12-hour AM/PM input instead of 24h
+                "32/01/0001",          // Out-of-bounds day
+                "01/13/0001",          // Out-of-bounds month
+                "29/02/0001",          // Non-leap year Feb 29 (Year 1 is not a leap year)
+                "30/02/0004",          // Non-existent Feb 30 in leap year
+                "01/01/0001 2400",     // Out-of-bounds hour in strict mode
+                "01/01/0001 1260",     // Out-of-bounds minute
+                "invalid-date",        // Arbitrary string
+                "",                    // Empty string
+                "   "                  // Blank whitespace string
         })
         void parse_invalidFormats_throwsInvalidFormatException(String invalidInput) {
             assertThrows(InvalidFormatException.class, () -> DateFormat.parse(invalidInput));

@@ -25,13 +25,13 @@ public class ParserTest {
     class ParseInputTests {
 
         @Test
-        public void parseInput_singleWord_returnsSingleElementArray() throws InvalidArgumentException {
+        public void parseInput_singleWord_returnsSingleElementArray() throws Exception {
             String[] test = Parser.parseInput("word");
             assertArrayEquals(new String[]{"word"}, test);
         }
 
         @Test
-        public void parseInput_multipleWords_returnsTwoElementArray() throws InvalidArgumentException {
+        public void parseInput_multipleWords_returnsTwoElementArray() throws Exception {
             String[] test1 = Parser.parseInput("two words");
             String[] test2 = Parser.parseInput("more than two words");
             assertArrayEquals(new String[]{"two", "words"}, test1);
@@ -49,7 +49,7 @@ public class ParserTest {
     class ParseCommandTests {
 
         @Test
-        public void parseCommand_validInput_returnsCorrectEnum() throws InvalidArgumentException {
+        public void parseCommand_validInput_returnsCorrectEnum() throws Exception {
             assertEquals(Command.BYE, Parser.parseCommand("bye"));
             assertEquals(Command.LIST, Parser.parseCommand("list"));
             assertEquals(Command.MARK, Parser.parseCommand("mark 1"));
@@ -78,7 +78,7 @@ public class ParserTest {
         }
 
         @Test
-        void checkEdit_validIndex_returnsZeroBasedIndex() throws SpoonException {
+        void checkEdit_validIndex_returnsZeroBasedIndex() throws Exception {
             assertEquals(0, Parser.checkEdit("mark 1", testTaskList));
             assertEquals(2, Parser.checkEdit("unmark 3", testTaskList));
         }
@@ -120,16 +120,38 @@ public class ParserTest {
     }
 
     @Nested
+    class CheckFindTests {
+
+        @Test
+        void checkFind_singleKeyword_returnsKeywordArray() throws Exception {
+            String[] result = Parser.checkFind("find book");
+            assertArrayEquals(new String[]{"book"}, result);
+        }
+
+        @Test
+        void checkFind_multipleCommaSeparatedKeywords_returnsSplitTokens() throws Exception {
+            String[] result = Parser.checkFind("find book, read, homework");
+            assertArrayEquals(new String[]{"book", "read", "homework"}, result);
+        }
+
+        @Test
+        void checkFind_missingKeyword_throwsMissingArgumentException() {
+            assertThrows(MissingArgumentException.class, () -> Parser.checkFind("find"));
+            assertThrows(MissingArgumentException.class, () -> Parser.checkFind("find   "));
+        }
+    }
+
+    @Nested
     class CheckAddTests {
 
         @Test
-        void checkAdd_validToDo_returnsToDoInstance() throws SpoonException {
+        void checkAdd_validToDo_returnsToDoInstance() throws Exception {
             Task task = Parser.checkAdd("todo task");
             assertInstanceOf(ToDo.class, task);
         }
 
         @Test
-        void checkAdd_validDeadline_returnsDeadlineInstance() throws SpoonException {
+        void checkAdd_validDeadline_returnsDeadlineInstance() throws Exception {
             Task task = Parser.checkAdd("deadline task /by 01/01/0001");
             assertInstanceOf(Deadline.class, task);
         }
@@ -157,6 +179,12 @@ public class ParserTest {
         }
 
         @Test
+        void checkAdd_deadlineDuplicateDelimiter_throwsDuplicateArgumentException() {
+            assertThrows(DuplicateArgumentException.class, () -> Parser.checkAdd(
+                    "deadline task /by 01/01/0001 /by 02/01/0001"));
+        }
+
+        @Test
         void checkAdd_eventMissingComponents_throwsMissingArgumentException() {
             // Missing description before /from or /to
             assertThrows(MissingArgumentException.class, () -> Parser.checkAdd(
@@ -172,6 +200,16 @@ public class ParserTest {
             assertThrows(MissingArgumentException.class, () -> Parser.checkAdd("event task /from 01/01/0001 0101"));
             // Missing date after /to
             assertThrows(MissingArgumentException.class, () -> Parser.checkAdd("event task /from 01/01/0001 /to "));
+        }
+
+        @Test
+        void checkAdd_eventDuplicateDelimiters_throwsDuplicateArgumentException() {
+            // Duplicate /from flags
+            assertThrows(DuplicateArgumentException.class, () -> Parser.checkAdd(
+                    "event task /from 01/01/0001 /from 02/01/0001 /to 03/01/0001"));
+            // Duplicate /to flags
+            assertThrows(DuplicateArgumentException.class, () -> Parser.checkAdd(
+                    "event task /from 01/01/0001 /to 02/01/0001 /to 03/01/0001"));
         }
 
         @Test
