@@ -249,6 +249,10 @@ public class Spoon {
         }
     }
 
+    public String getIntroduction() {
+        return userInterface.showIntroduction();
+    }
+
     /**
      * Wakes Spoon up! (starts the Spoon chatbot).
      */

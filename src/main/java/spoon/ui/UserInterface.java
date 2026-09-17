@@ -64,6 +64,10 @@ public class UserInterface {
         return DIVIDER + System.lineSeparator();
     }
 
+    public String showIntroduction() {
+        return INTRODUCTION + System.lineSeparator();
+    }
+
     public String showStart() {
         return BANNER + System.lineSeparator()
                 + showDivider()

@@ -36,10 +36,14 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Injects the Spoon instance
+     * Injects the Spoon instance and sends the introductory message.
      */
     public void setSpoon(Spoon spoon) {
         this.spoon = spoon;
+
+        dialogContainer.getChildren().add(
+                DialogBox.getSpoonDialog(spoon.getIntroduction(), spoonImage)
+        );
     }
 
     /**
